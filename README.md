@@ -2,6 +2,12 @@
 
 convert json data to tabular format
 
+## Installation
+
+```
+go install github.com/siakhooi/json2table/cmd/json2table@latest
+```
+
 ### Quality
 
 - https://sonarcloud.io/project/overview?id=siakhooi_json2table
