@@ -6,8 +6,8 @@ package version
 const json2tableVersion = "0.0.1"
 
 /*
-GetVersion return version
+Version return version
 */
-func GetVersion() string {
+func Version() string {
 	return json2tableVersion
 }

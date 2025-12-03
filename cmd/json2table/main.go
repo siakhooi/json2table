@@ -16,7 +16,7 @@ func main() {
 	cmd := &cli.Command{
 		Name:    "json2table",
 		Usage:   "convert json data to tabular format",
-		Version: version.GetVersion(),
+		Version: version.Version(),
 		Action: func(context.Context, *cli.Command) error {
 			return nil
 		},
