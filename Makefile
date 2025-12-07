@@ -24,5 +24,9 @@ commit-watch: commit
 release-watch: release
 	gh run watch
 
-binrun:
+run:
+	bin/json2table-linux-amd64 -h
 	bin/json2table-linux-amd64
+	bin/json2table-linux-amd64 ./test.json
+run-i:
+	bin/json2table-linux-amd64 ./test.json ./test.json
