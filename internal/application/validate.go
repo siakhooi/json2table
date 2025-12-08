@@ -6,9 +6,15 @@ package application
 import "fmt"
 
 // ValidateArgs of cli
-func ValidateArgs(args []string) error {
-	if len(args) > 1 {
-		return fmt.Errorf("invalid arguments")
+func ValidateArgs(args []string) (string, error) {
+	if len(args) == 0 {
+		return "", fmt.Errorf("inputJsonFile is required")
 	}
-	return nil
+
+	if len(args) > 1 {
+		return "", fmt.Errorf("too many arguments")
+	}
+	filename := args[0]
+
+	return filename, nil
 }

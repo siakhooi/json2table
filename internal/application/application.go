@@ -5,6 +5,7 @@ package application
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/siakhooi/json2table/internal/version"
 	"github.com/urfave/cli/v3"
@@ -27,12 +28,12 @@ func Run(args []string) error {
 }
 
 func action(_ context.Context, c *cli.Command) error {
-	args := c.Args().Slice()
-	if len(args) == 0 {
-		return cli.ShowAppHelp(c)
+	filename, err := ValidateArgs(c.Args().Slice())
+	if err != nil {
+		return err
 	}
-
-	return ValidateArgs(args)
+	fmt.Printf("filename is %s\n", filename)
+	return nil
 }
 func flags() []cli.Flag {
 	return nil
