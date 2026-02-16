@@ -10,8 +10,8 @@
   },
   "packageRules": [
     {
-      "matchDatasources": ["golang-version"],
-      "allowedVersions": "1.25.*",
+      "matchDatasources": ["golang-version", "go-version"],
+      "allowedVersions": ">=1.25.0 <1.26.0",
       "automerge": false
     }
   ],
