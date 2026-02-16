@@ -1,0 +1,22 @@
+{
+  "extends": ["config:base"],
+  "go": {
+    "rangeStrategy": "bump",
+    "ignoreUnstable": true
+  },
+  "golang": {
+    "rangeStrategy": "bump",
+    "ignoreUnstable": true
+  },
+  "packageRules": [
+    {
+      "matchDatasources": ["golang-version"],
+      "allowedVersions": "1.25.*",
+      "automerge": false
+    }
+  ],
+  "dependencyDashboard": false,
+  "assignees": ["siakhooi"],
+  "reviewers": ["siakhooi"],
+  "semanticCommits": true
+}
