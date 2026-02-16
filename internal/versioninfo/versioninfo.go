@@ -3,11 +3,7 @@ Package versioninfo return version
 */
 package versioninfo
 
-const json2tableVersion = "0.0.1"
-
-/*
-Version return version
-*/
-func Version() string {
-	return json2tableVersion
-}
+var (
+	// Version holds the version string of the application.
+	Version = "0.0.0"
+)

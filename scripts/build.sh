@@ -27,12 +27,17 @@ shift $((OPTIND - 1))
 program=json2table
 source=./cmd/json2table
 
+# shellcheck disable=SC1091
+. ./release.env
+
 build(){
   local GOOS=$1
   local GOARCH=$2
   local extension=$3
   echo "Building for $GOOS/$GOARCH"
-  go build -o bin/"${program}-${GOOS}-${GOARCH}${extension}" $source
+  go build \
+  -ldflags "-X github.com/siakhooi/json2table/internal/versioninfo.Version=$RELEASE_VERSION" \
+  -o bin/"${program}-${GOOS}-${GOARCH}${extension}" $source
 }
 
 if [[ "$build" == "linux_amd64" ]]; then

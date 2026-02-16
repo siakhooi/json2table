@@ -21,7 +21,7 @@ func Run(args []string) error {
 		Name:      "json2table",
 		Usage:     "convert json data to tabular format",
 		ArgsUsage: "inputJsonFile",
-		Version:   versioninfo.Version(),
+		Version:   versioninfo.Version,
 		Action:    action,
 		Flags:     flags(),
 	}
