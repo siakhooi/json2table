@@ -3,6 +3,8 @@ clean:
 build:
 	scripts/build.sh
 	goreleaser build --snapshot --clean
+build-linux:
+	GOOS=linux GOARCH=amd64 go build -o bin/json2table-linux-amd64 ./cmd/json2table
 test:
 	scripts/test.sh
 golangci-lint:
@@ -24,8 +26,11 @@ commit-watch: commit
 release-watch: release
 	gh run watch
 
-run:
+run-help:
 	bin/json2table-linux-amd64 -h
+run-version:
+	bin/json2table-linux-amd64 -v
+run:
 	bin/json2table-linux-amd64 ./test.json
 run-i:
 	bin/json2table-linux-amd64

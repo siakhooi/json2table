@@ -1,7 +1,7 @@
 /*
-Package version return version
+Package versioninfo return version
 */
-package version
+package versioninfo
 
 const json2tableVersion = "0.0.1"
 

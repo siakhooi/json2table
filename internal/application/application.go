@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/siakhooi/json2table/internal/version"
+	"github.com/siakhooi/json2table/internal/versioninfo"
 	"github.com/urfave/cli/v3"
 )
 
@@ -21,7 +21,7 @@ func Run(args []string) error {
 		Name:      "json2table",
 		Usage:     "convert json data to tabular format",
 		ArgsUsage: "inputJsonFile",
-		Version:   version.Version(),
+		Version:   versioninfo.Version(),
 		Action:    action,
 		Flags:     flags(),
 	}
