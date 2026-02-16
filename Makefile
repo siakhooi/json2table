@@ -4,7 +4,7 @@ build:
 	scripts/build.sh
 	goreleaser build --snapshot --clean
 build-linux:
-	GOOS=linux GOARCH=amd64 go build -o bin/json2table-linux-amd64 ./cmd/json2table
+	scripts/build.sh -l
 test:
 	scripts/test.sh
 golangci-lint:
