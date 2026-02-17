@@ -51,13 +51,13 @@ func action(_ context.Context, c *cli.Command) error {
 
 	fmt.Println(string(prettyJSON))
 
-	filename, err := ValidateArgs(c.Args().Slice())
+	dataFile, err := ValidateArgs(c.Args().Slice())
 	if err != nil {
 		return err
 	}
 
 	var data []byte
-	if filename == "-" {
+	if dataFile == "-" {
 		// read from stdin
 		data, err = io.ReadAll(os.Stdin)
 		if err != nil {
@@ -65,13 +65,13 @@ func action(_ context.Context, c *cli.Command) error {
 		}
 	} else {
 		// Check if file is readable
-		_, err = os.Open(filename)
+		_, err = os.Open(dataFile)
 		if err != nil {
 			return fmt.Errorf("cannot read file: %w", err)
 		}
 
 		// Read file contents
-		data, err = os.ReadFile(filename)
+		data, err = os.ReadFile(dataFile)
 		if err != nil {
 			return fmt.Errorf("error reading file: %w", err)
 		}
