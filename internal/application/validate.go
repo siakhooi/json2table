@@ -21,7 +21,7 @@ func ValidateArgs(args []string) (string, error) {
 			return "-", nil
 		}
 
-		return "", fmt.Errorf("inputJsonFile is required")
+		return "", fmt.Errorf("dataFile is required")
 	}
 
 	if len(args) > 1 {
