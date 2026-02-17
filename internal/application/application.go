@@ -37,6 +37,31 @@ func action(_ context.Context, c *cli.Command) error {
 		return nil
 	}
 
+	// If --spec was provided, handle spec file
+	if specFile := c.String("spec"); specFile != "" {
+		// Validate and process spec file
+		data, err := os.ReadFile(specFile)
+		if err != nil {
+			return fmt.Errorf("cannot read spec file: %w", err)
+		}
+
+		// Parse JSON
+		var specData interface{}
+		err = json.Unmarshal(data, &specData)
+		if err != nil {
+			return fmt.Errorf("error parsing spec file: %w", err)
+		}
+
+		// Pretty print spec JSON
+		prettyJSON, err := json.MarshalIndent(specData, "", "  ")
+		if err != nil {
+			return fmt.Errorf("error formatting spec file: %w", err)
+		}
+
+		fmt.Println(string(prettyJSON))
+		return nil
+	}
+
 	filename, err := ValidateArgs(c.Args().Slice())
 	if err != nil {
 		return err
@@ -84,6 +109,11 @@ func flags() []cli.Flag {
 		&cli.BoolFlag{
 			Name:  "build",
 			Usage: "print build info and exit",
+		},
+		&cli.StringFlag{
+			Name:    "spec",
+			Aliases: []string{"s"},
+			Usage:   "read spec from specFile.json",
 		},
 	}
 }
