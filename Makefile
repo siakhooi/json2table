@@ -30,8 +30,12 @@ run-version:
 	bin/json2table-linux-amd64 -v
 run-build:
 	bin/json2table-linux-amd64 --build
-run:
+run-1:
 	bin/json2table-linux-amd64 ./test.json
+run-3:
+	cat ./test.json| bin/json2table-linux-amd64
+run-2:
+	bin/json2table-linux-amd64
 run-i:
 	bin/json2table-linux-amd64
 	bin/json2table-linux-amd64 ./test.json ./test.json
