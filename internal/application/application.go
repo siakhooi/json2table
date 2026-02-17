@@ -30,6 +30,11 @@ func Run(args []string) error {
 }
 
 func action(_ context.Context, c *cli.Command) error {
+	// If --build was provided, print build info and exit
+	if c.Bool("build") {
+		fmt.Printf("Version: %s\nCommit: %s\nBuildDate: %s\n", versioninfo.Version, versioninfo.Commit, versioninfo.Date)
+		return nil
+	}
 	filename, err := ValidateArgs(c.Args().Slice())
 	if err != nil {
 		return err
@@ -64,5 +69,10 @@ func action(_ context.Context, c *cli.Command) error {
 	return nil
 }
 func flags() []cli.Flag {
-	return nil
+	return []cli.Flag{
+		&cli.BoolFlag{
+			Name:  "build",
+			Usage: "print build info and exit",
+		},
+	}
 }

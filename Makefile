@@ -28,6 +28,8 @@ run-help:
 	bin/json2table-linux-amd64 -h
 run-version:
 	bin/json2table-linux-amd64 -v
+run-build:
+	bin/json2table-linux-amd64 --build
 run:
 	bin/json2table-linux-amd64 ./test.json
 run-i:
