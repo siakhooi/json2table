@@ -33,7 +33,7 @@ func ValidateArgs(args []string) (string, error) {
 }
 
 // ValidateSpecFile validates the spec file option
-// First checks the provided specFile parameter, then falls back to JSON2TABLE_SPEC_FILE environment variable
+// Requires either the specFile parameter or JSON2TABLE_SPEC_FILE environment variable to be set
 func ValidateSpecFile(specFile string) (string, error) {
 	// If specFile is provided via CLI flag, use it
 	if specFile != "" {
@@ -46,6 +46,6 @@ func ValidateSpecFile(specFile string) (string, error) {
 		return envSpecFile, nil
 	}
 
-	// Neither CLI flag nor environment variable provided
-	return "", fmt.Errorf("specFile is required: provide -s/--spec flag or set JSON2TABLE_SPEC_FILE environment variable")
+	// Neither CLI flag nor environment variable provided - spec is mandatory
+	return "", fmt.Errorf("spec is mandatory: provide -s/--spec flag or set JSON2TABLE_SPEC_FILE environment variable")
 }

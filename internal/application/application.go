@@ -37,35 +37,19 @@ func action(_ context.Context, c *cli.Command) error {
 		return nil
 	}
 
-	// If --spec was provided or JSON2TABLE_SPEC_FILE is set, handle spec file
+	// Read and validate spec (mandatory)
 	specFile := c.String("spec")
-	if specFile != "" || os.Getenv("JSON2TABLE_SPEC_FILE") != "" {
-		validatedSpecFile, err := ValidateSpecFile(specFile)
-		if err != nil {
-			return err
-		}
-
-		// read spec file
-		data, err := os.ReadFile(validatedSpecFile)
-		if err != nil {
-			return fmt.Errorf("cannot read spec file: %w", err)
-		}
-
-		// Parse and validate spec
-		spec, err := ParseAndValidateSpec(data)
-		if err != nil {
-			return err
-		}
-
-		// Pretty print spec JSON
-		prettyJSON, err := json.MarshalIndent(spec, "", "  ")
-		if err != nil {
-			return fmt.Errorf("error formatting spec file: %w", err)
-		}
-
-		fmt.Println(string(prettyJSON))
-		return nil
+	spec, err := ReadSpec(specFile)
+	if err != nil {
+		return err
 	}
+	// Pretty print spec JSON
+	prettyJSON, err := json.MarshalIndent(spec, "", "  ")
+	if err != nil {
+		return fmt.Errorf("error formatting spec file: %w", err)
+	}
+
+	fmt.Println(string(prettyJSON))
 
 	filename, err := ValidateArgs(c.Args().Slice())
 	if err != nil {
@@ -101,12 +85,12 @@ func action(_ context.Context, c *cli.Command) error {
 	}
 
 	// Pretty print JSON
-	prettyJSON, err := json.MarshalIndent(jsonData, "", "  ")
+	prettyJSON1, err := json.MarshalIndent(jsonData, "", "  ")
 	if err != nil {
 		return fmt.Errorf("error formatting JSON: %w", err)
 	}
 
-	fmt.Println(string(prettyJSON))
+	fmt.Println(string(prettyJSON1))
 	return nil
 }
 func flags() []cli.Flag {

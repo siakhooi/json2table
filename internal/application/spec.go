@@ -6,6 +6,7 @@ package application
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 )
 
 // Column represents a column specification
@@ -53,4 +54,22 @@ func ValidateSpec(spec *Spec) error {
 	}
 
 	return nil
+}
+
+// ReadSpec reads a spec file, validates it, and returns the parsed Spec
+func ReadSpec(specFile string) (*Spec, error) {
+	// Validate and get the spec file path
+	validatedSpecFile, err := ValidateSpecFile(specFile)
+	if err != nil {
+		return nil, err
+	}
+
+	// Read the spec file
+	data, err := os.ReadFile(validatedSpecFile)
+	if err != nil {
+		return nil, fmt.Errorf("cannot read spec file: %w", err)
+	}
+
+	// Parse and validate the spec
+	return ParseAndValidateSpec(data)
 }
