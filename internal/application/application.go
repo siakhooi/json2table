@@ -37,10 +37,16 @@ func action(_ context.Context, c *cli.Command) error {
 		return nil
 	}
 
-	// If --spec was provided, handle spec file
-	if specFile := c.String("spec"); specFile != "" {
-		// Validate and process spec file
-		data, err := os.ReadFile(specFile)
+	// If --spec was provided or JSON2TABLE_SPEC_FILE is set, handle spec file
+	specFile := c.String("spec")
+	if specFile != "" || os.Getenv("JSON2TABLE_SPEC_FILE") != "" {
+		validatedSpecFile, err := ValidateSpecFile(specFile)
+		if err != nil {
+			return err
+		}
+
+		// read spec file
+		data, err := os.ReadFile(validatedSpecFile)
 		if err != nil {
 			return fmt.Errorf("cannot read spec file: %w", err)
 		}
@@ -113,7 +119,7 @@ func flags() []cli.Flag {
 		&cli.StringFlag{
 			Name:    "spec",
 			Aliases: []string{"s"},
-			Usage:   "read spec from specFile.json",
+			Usage:   "read spec from specFile.json, or from environment variable JSON2TABLE_SPEC_FILE if not provided",
 		},
 	}
 }

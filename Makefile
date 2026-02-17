@@ -44,3 +44,7 @@ run-spec-2:
 	bin/json2table-linux-amd64 --spec ./spec.json ./test.json
 run-spec-3:
 	cat ./test.json |bin/json2table-linux-amd64 -s ./spec.json 
+run-spec-4:
+	JSON2TABLE_SPEC_FILE=./spec.json bin/json2table-linux-amd64 ./test.json
+run-spec-5:
+	cat  ./test.json |JSON2TABLE_SPEC_FILE=./spec.json bin/json2table-linux-amd64
