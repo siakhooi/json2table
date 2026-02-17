@@ -31,20 +31,20 @@ run-version:
 run-no-arguments:
 	bin/json2table-linux-amd64
 run-too-many-arguments:
-	bin/json2table-linux-amd64 ./test.json ./test.json
+	bin/json2table-linux-amd64 ./samples/data1.json ./samples/data1.json
 run-build:
 	bin/json2table-linux-amd64 --build
 run-input-1:
-	bin/json2table-linux-amd64 ./test.json
+	bin/json2table-linux-amd64 ./samples/data1.json
 run-input-3:
-	cat ./test.json| bin/json2table-linux-amd64
+	cat ./samples/data1.json| bin/json2table-linux-amd64
 run-spec-1:
-	bin/json2table-linux-amd64 -s ./spec.json ./test.json
+	bin/json2table-linux-amd64 -s ./samples/spec1.json ./samples/data1.json
 run-spec-2:
-	bin/json2table-linux-amd64 --spec ./spec.json ./test.json
+	bin/json2table-linux-amd64 --spec ./samples/spec1.json ./samples/data1.json
 run-spec-3:
-	cat ./test.json |bin/json2table-linux-amd64 -s ./spec.json 
+	cat ./samples/data1.json |bin/json2table-linux-amd64 -s ./samples/spec1.json 
 run-spec-4:
-	JSON2TABLE_SPEC_FILE=./spec.json bin/json2table-linux-amd64 ./test.json
+	JSON2TABLE_SPEC_FILE=./samples/spec1.json bin/json2table-linux-amd64 ./samples/data1.json
 run-spec-5:
-	cat  ./test.json |JSON2TABLE_SPEC_FILE=./spec.json bin/json2table-linux-amd64
+	cat  ./samples/data1.json |JSON2TABLE_SPEC_FILE=./samples/spec1.json bin/json2table-linux-amd64
