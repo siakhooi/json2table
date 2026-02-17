@@ -33,7 +33,7 @@ func Run(args []string) error {
 func action(_ context.Context, c *cli.Command) error {
 	// If --build was provided, print build info and exit
 	if c.Bool("build") {
-		fmt.Printf("Version: %s\nCommit: %s\nBuildDate: %s\n", versioninfo.Version, versioninfo.Commit, versioninfo.Date)
+		versioninfo.PrintBuildInfo()
 		return nil
 	}
 
