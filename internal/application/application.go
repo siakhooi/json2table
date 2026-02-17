@@ -51,15 +51,14 @@ func action(_ context.Context, c *cli.Command) error {
 			return fmt.Errorf("cannot read spec file: %w", err)
 		}
 
-		// Parse JSON
-		var specData interface{}
-		err = json.Unmarshal(data, &specData)
+		// Parse and validate spec
+		spec, err := ParseAndValidateSpec(data)
 		if err != nil {
-			return fmt.Errorf("error parsing spec file: %w", err)
+			return err
 		}
 
 		// Pretty print spec JSON
-		prettyJSON, err := json.MarshalIndent(specData, "", "  ")
+		prettyJSON, err := json.MarshalIndent(spec, "", "  ")
 		if err != nil {
 			return fmt.Errorf("error formatting spec file: %w", err)
 		}
