@@ -7,8 +7,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
-	"os"
 
 	"github.com/siakhooi/json2table/internal/versioninfo"
 	"github.com/urfave/cli/v3"
@@ -31,18 +29,33 @@ func Run(args []string) error {
 }
 
 func action(_ context.Context, c *cli.Command) error {
-	// If --build was provided, print build info and exit
 	if c.Bool("build") {
 		versioninfo.PrintBuildInfo()
 		return nil
 	}
 
-	// Read and validate spec (mandatory)
 	specFile := c.String("spec")
-	spec, err := ReadSpec(specFile)
+	validatedSpecFile, err := ValidateSpecFile(specFile)
 	if err != nil {
 		return err
 	}
+
+	dataFile, err := ValidateArgs(c.Args().Slice())
+	if err != nil {
+		return err
+	}
+
+	// Read spec data
+	specData, err := ReadSpec(validatedSpecFile)
+	if err != nil {
+		return err
+	}
+	// Parse and validate the spec
+	spec, err := ParseAndValidateSpec(specData)
+	if err != nil {
+		return err
+	}
+
 	// Pretty print spec JSON
 	prettyJSON, err := json.MarshalIndent(spec, "", "  ")
 	if err != nil {
@@ -51,30 +64,9 @@ func action(_ context.Context, c *cli.Command) error {
 
 	fmt.Println(string(prettyJSON))
 
-	dataFile, err := ValidateArgs(c.Args().Slice())
+	data, err := ReadData(dataFile)
 	if err != nil {
 		return err
-	}
-
-	var data []byte
-	if dataFile == "-" {
-		// read from stdin
-		data, err = io.ReadAll(os.Stdin)
-		if err != nil {
-			return fmt.Errorf("error reading stdin: %w", err)
-		}
-	} else {
-		// Check if file is readable
-		_, err = os.Open(dataFile)
-		if err != nil {
-			return fmt.Errorf("cannot read file: %w", err)
-		}
-
-		// Read file contents
-		data, err = os.ReadFile(dataFile)
-		if err != nil {
-			return fmt.Errorf("error reading file: %w", err)
-		}
 	}
 
 	// Parse JSON
