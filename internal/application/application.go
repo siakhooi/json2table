@@ -34,19 +34,12 @@ func action(_ context.Context, c *cli.Command) error {
 		return nil
 	}
 
-	specFile := c.String("spec")
-	validatedSpecFile, err := ValidateSpecFile(specFile)
+	args, err := ParseArguments(c)
 	if err != nil {
 		return err
 	}
-
-	dataFile, err := ValidateArgs(c.Args().Slice())
-	if err != nil {
-		return err
-	}
-
 	// Read spec data
-	specData, err := ReadSpec(validatedSpecFile)
+	specData, err := ReadSpec(args.SpecFile)
 	if err != nil {
 		return err
 	}
@@ -64,7 +57,7 @@ func action(_ context.Context, c *cli.Command) error {
 
 	fmt.Println(string(prettyJSON))
 
-	data, err := ReadData(dataFile)
+	data, err := ReadData(args.DataFile)
 	if err != nil {
 		return err
 	}

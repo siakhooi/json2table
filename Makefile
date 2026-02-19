@@ -11,7 +11,7 @@ golangci-lint:
 	golangci-lint run
 
 all: clean test golangci-lint build
-
+quick: clean test golangci-lint build-linux
 commit:
 	scripts/git-commit-and-push.sh
 
@@ -28,12 +28,16 @@ run-help:
 	bin/json2table-linux-amd64 -h
 run-version:
 	bin/json2table-linux-amd64 -v
-run-no-arguments:
-	bin/json2table-linux-amd64
-run-too-many-arguments:
-	bin/json2table-linux-amd64 ./samples/data1.json ./samples/data1.json
 run-build:
 	bin/json2table-linux-amd64 --build
+run-no-arguments-1:
+	bin/json2table-linux-amd64
+run-no-arguments-2:
+	bin/json2table-linux-amd64 -s ./samples/spec1.json
+run-too-many-arguments-1:
+	bin/json2table-linux-amd64 ./samples/data1.json ./samples/data1.json
+run-too-many-arguments-2:
+	bin/json2table-linux-amd64 -s ./samples/spec.json ./samples/data1.json ./samples/data1.json
 run-1:
 	bin/json2table-linux-amd64 -s ./samples/spec1.json ./samples/data1.json
 run-2:

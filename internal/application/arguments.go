@@ -1,0 +1,83 @@
+/*
+Package application run the application
+*/
+package application
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/urfave/cli/v3"
+)
+
+// Arguments holds the parsed CLI arguments
+type Arguments struct {
+	SpecFile string
+	DataFile string
+}
+
+// ParseArguments parses CLI arguments, validates them into an Arguments struct
+func ParseArguments(c *cli.Command) (Arguments, error) {
+	specFile := ValidateSpecFile(c.String("spec"))
+
+	argumentsList := c.Args().Slice()
+	dataFile, err := ValidateDataFile(argumentsList)
+	if err != nil {
+		return Arguments{}, err
+	}
+
+	args := Arguments{
+		SpecFile: specFile,
+		DataFile: dataFile,
+	}
+	if specFile == "" {
+		return Arguments{}, fmt.Errorf("spec is mandatory: provide -s/--spec flag or set JSON2TABLE_SPEC_FILE environment variable")
+	}
+	if len(argumentsList) > 1 {
+		return Arguments{}, fmt.Errorf("too many arguments: only one data file argument is allowed")
+	}
+	if dataFile == "" {
+		return Arguments{}, fmt.Errorf("data file is required: provide a data file argument or pipe data to stdin")
+	}
+
+	return args, nil
+}
+
+// ValidateSpecFile validates the spec file option
+// Requires either the specFile parameter or JSON2TABLE_SPEC_FILE environment variable to be set
+func ValidateSpecFile(specFile string) string {
+	// If specFile is provided via CLI flag, use it
+	if specFile != "" {
+		return specFile
+	}
+
+	// Try to read from environment variable
+	envSpecFile := os.Getenv("JSON2TABLE_SPEC_FILE")
+	if envSpecFile != "" {
+		return envSpecFile
+	}
+
+	// Neither CLI flag nor environment variable provided
+	return ""
+}
+
+// ValidateDataFile validates the data file argument, ensuring that either a single file is provided or data is piped to stdin
+func ValidateDataFile(args []string) (string, error) {
+	if len(args) == 0 {
+		// check if stdin is piped
+		fi, err := os.Stdin.Stat()
+		if err != nil {
+			return "", fmt.Errorf("cannot stat stdin: %w", err)
+		}
+		// If stdin is not a character device, treat as piped input
+		if (fi.Mode() & os.ModeCharDevice) == 0 {
+			return "-", nil
+		}
+
+		return "", nil
+	}
+
+	filename := args[0]
+
+	return filename, nil
+}
