@@ -18,13 +18,13 @@ type Column struct {
 
 // Spec represents the specification structure
 type Spec struct {
-	Data    string   `json:"data"`
-	Columns []Column `json:"columns" validate:"required,min=1,dive"`
+	DataPath string   `json:"dataPath"`
+	Columns  []Column `json:"columns" validate:"required,min=1,dive"`
 }
 
 func (s *Spec) setDefaults() {
-	if s.Data == "" {
-		s.Data = "$"
+	if s.DataPath == "" {
+		s.DataPath = "$"
 	}
 }
 
