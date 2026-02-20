@@ -16,6 +16,8 @@ import (
 type Column struct {
 	Path  string `json:"path" validate:"required"`
 	Title string `json:"title"`
+
+	Width int
 }
 
 // Spec represents the specification structure
@@ -33,6 +35,7 @@ func (c *Column) setDefaults() {
 			c.Title = c.Path
 		}
 	}
+	c.Width = len(c.Title)
 }
 func (s *Spec) setDefaults() {
 	if s.DataPath == "" {
