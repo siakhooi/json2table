@@ -1,11 +1,12 @@
 {
     "dataPath": "$.data2",
-    "columns":[
+    "columns": [
         {
-            "path":"id"
+            "path": "id",
+            "title": "ID"
         },
         {
-            "path":"name"
+            "path": "display.name"
         }
     ]
 }

@@ -7,13 +7,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/go-playground/validator/v10"
 )
 
 // Column represents a column specification
 type Column struct {
-	Path string `json:"path" validate:"required"`
+	Path  string `json:"path" validate:"required"`
+	Title string `json:"title"`
 }
 
 // Spec represents the specification structure
@@ -22,9 +24,22 @@ type Spec struct {
 	Columns  []Column `json:"columns" validate:"required,min=1,dive"`
 }
 
+func (c *Column) setDefaults() {
+	if c.Title == "" {
+		parts := strings.Split(c.Path, ".")
+		if len(parts) > 1 {
+			c.Title = parts[len(parts)-1]
+		} else {
+			c.Title = c.Path
+		}
+	}
+}
 func (s *Spec) setDefaults() {
 	if s.DataPath == "" {
 		s.DataPath = "$"
+	}
+	for i := range s.Columns {
+		s.Columns[i].setDefaults()
 	}
 }
 

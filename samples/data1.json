@@ -2,13 +2,23 @@
     "data1": [
         {
             "id": 1,
-            "name": "bar"
+            "display": {
+                "name": "bar"
+            }
         }
     ],
     "data2": [
         {
             "id": 2,
-            "name": "baz"
+            "display": {
+                "name": "foo"
+            }
+        },
+        {
+            "id": 3,
+            "display": {
+                "name": "baz"
+            }
         }
     ]
 }

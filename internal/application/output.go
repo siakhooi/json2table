@@ -20,6 +20,10 @@ func PrintTable(spec *Spec, fullData interface{}) error {
 
 	//iterate data as array and print each item
 	if dataArray, ok := data.([]interface{}); ok {
+		for _, column := range spec.Columns {
+			fmt.Printf("%s ", column.Title)
+		}
+		fmt.Println("")
 		for _, item := range dataArray {
 			for _, column := range spec.Columns {
 				value, err := jsonpath.Get(column.Path, item)
