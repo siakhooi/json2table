@@ -4,6 +4,7 @@ Package application handles spec file operations
 package application
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -32,4 +33,23 @@ func ReadData(dataFilePath string) ([]byte, error) {
 	}
 	return data, nil
 
+}
+
+// ParseData parses JSON data into an interface{}
+func ParseData(data []byte) (interface{}, error) {
+	var jsonData interface{}
+	err := json.Unmarshal(data, &jsonData)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing JSON: %w", err)
+	}
+	return jsonData, nil
+}
+
+// ReadParseData reads a data file and parses it into an interface{}
+func ReadParseData(dataFilePath string) (interface{}, error) {
+	data, err := ReadData(dataFilePath)
+	if err != nil {
+		return nil, err
+	}
+	return ParseData(data)
 }

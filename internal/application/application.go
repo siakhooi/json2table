@@ -5,8 +5,6 @@ package application
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 
 	"github.com/siakhooi/json2table/internal/versioninfo"
 	"github.com/urfave/cli/v3"
@@ -38,45 +36,17 @@ func action(_ context.Context, c *cli.Command) error {
 	if err != nil {
 		return err
 	}
-	// Read spec data
-	specData, err := ReadSpec(args.SpecFile)
-	if err != nil {
-		return err
-	}
-	// Parse and validate the spec
-	spec, err := ParseAndValidateSpec(specData)
+
+	spec, err := ReadParseValidateSpec(args.SpecFile)
 	if err != nil {
 		return err
 	}
 
-	// Pretty print spec JSON
-	prettyJSON, err := json.MarshalIndent(spec, "", "  ")
-	if err != nil {
-		return fmt.Errorf("error formatting spec file: %w", err)
-	}
-
-	fmt.Println(string(prettyJSON))
-
-	data, err := ReadData(args.DataFile)
+	jsonData, err := ReadParseData(args.DataFile)
 	if err != nil {
 		return err
 	}
-
-	// Parse JSON
-	var jsonData interface{}
-	err = json.Unmarshal(data, &jsonData)
-	if err != nil {
-		return fmt.Errorf("error parsing JSON: %w", err)
-	}
-
-	// Pretty print JSON
-	prettyJSON1, err := json.MarshalIndent(jsonData, "", "  ")
-	if err != nil {
-		return fmt.Errorf("error formatting JSON: %w", err)
-	}
-
-	fmt.Println(string(prettyJSON1))
-	return nil
+	return PrintTable(spec, jsonData)
 }
 func flags() []cli.Flag {
 	return []cli.Flag{

@@ -18,7 +18,14 @@ type Column struct {
 
 // Spec represents the specification structure
 type Spec struct {
+	Data    string   `json:"data"`
 	Columns []Column `json:"columns" validate:"required,min=1,dive"`
+}
+
+func (s *Spec) setDefaults() {
+	if s.Data == "" {
+		s.Data = "$"
+	}
 }
 
 // ParseAndValidateSpec parses JSON data into a Spec and validates it
@@ -30,6 +37,7 @@ func ParseAndValidateSpec(data []byte) (*Spec, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error parsing spec: %w", err)
 	}
+	spec.setDefaults()
 
 	// Validate minimum structure
 	if err := ValidateSpec(&spec); err != nil {
@@ -53,11 +61,26 @@ func ValidateSpec(spec *Spec) error {
 }
 
 // ReadSpec reads a spec file
-func ReadSpec(validatedSpecFile string) ([]byte, error) {
+func ReadSpec(specFile string) ([]byte, error) {
 	// Read the spec file
-	data, err := os.ReadFile(validatedSpecFile)
+	data, err := os.ReadFile(specFile)
 	if err != nil {
 		return nil, fmt.Errorf("cannot read spec file: %w", err)
 	}
 	return data, nil
+}
+
+// ReadParseValidateSpec reads a spec file, parses it, and validates it
+func ReadParseValidateSpec(specFile string) (*Spec, error) {
+	data, err := ReadSpec(specFile)
+	if err != nil {
+		return nil, err
+	}
+
+	spec, err := ParseAndValidateSpec(data)
+	if err != nil {
+		return nil, err
+	}
+
+	return spec, nil
 }
