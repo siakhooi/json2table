@@ -1,5 +1,5 @@
 /*
-Package application handles spec file operations
+Package application run the application
 */
 package application
 
