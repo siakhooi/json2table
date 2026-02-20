@@ -7,16 +7,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+
+	"github.com/go-playground/validator/v10"
 )
 
 // Column represents a column specification
 type Column struct {
-	Path string `json:"path"`
+	Path string `json:"path" validate:"required"`
 }
 
 // Spec represents the specification structure
 type Spec struct {
-	Columns []Column `json:"columns"`
+	Columns []Column `json:"columns" validate:"required,min=1,dive"`
 }
 
 // ParseAndValidateSpec parses JSON data into a Spec and validates it
@@ -43,17 +45,11 @@ func ValidateSpec(spec *Spec) error {
 		return fmt.Errorf("spec is nil")
 	}
 
-	if len(spec.Columns) == 0 {
-		return fmt.Errorf("spec must contain at least one column")
-	}
+	validate := validator.New(validator.WithRequiredStructEnabled())
 
-	for i, col := range spec.Columns {
-		if col.Path == "" {
-			return fmt.Errorf("column %d: path is required", i)
-		}
-	}
+	err := validate.Struct(spec)
 
-	return nil
+	return err
 }
 
 // ReadSpec reads a spec file
