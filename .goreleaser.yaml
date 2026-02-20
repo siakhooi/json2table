@@ -16,11 +16,11 @@ builds:
       - windows
       - darwin
     ldflags:
-      - -s
-      - -w
-      - -X github.com/siakhooi/json2table/internal/versioninfo.Version={{.Version}}
-      - -X github.com/siakhooi/json2table/internal/versioninfo.Date={{.Date}}
-      - -X github.com/siakhooi/json2table/internal/versioninfo.Commit={{.Commit}}
+      - "-s"
+      - "-w"
+      - "-X github.com/siakhooi/json2table/internal/versioninfo.Version={{.Version}}"
+      - "-X github.com/siakhooi/json2table/internal/versioninfo.Date={{.Date}}"
+      - "-X github.com/siakhooi/json2table/internal/versioninfo.Commit={{.Commit}}"
 
 archives:
   - formats: [tar.gz]
