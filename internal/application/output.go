@@ -24,9 +24,24 @@ func selectDataArray(dataPath string, fullData interface{}) ([]interface{}, erro
 
 func printHeader(columns []Column) {
 	for _, column := range columns {
-		fmt.Printf("%*s ", column.Width, column.Title)
+		fmt.Printf("%*s ", -column.Width, column.Title)
 	}
 	fmt.Println("")
+}
+
+func analyseData(spec *Spec, dataArray []interface{}) {
+	for _, item := range dataArray {
+		for i, column := range spec.Columns {
+			value, err := jsonpath.Get(column.Path, item)
+			if err != nil {
+				continue
+			}
+			valueStr := fmt.Sprintf("%v", value)
+			if len(valueStr) > column.Width {
+				spec.Columns[i].Width = len(valueStr)
+			}
+		}
+	}
 }
 
 // PrintTable prints JSON data in tabular format based on the provided specification
@@ -35,6 +50,7 @@ func PrintTable(spec *Spec, fullData interface{}) error {
 	if err != nil {
 		return err
 	}
+	analyseData(spec, dataArray)
 
 	printHeader(spec.Columns)
 
@@ -44,7 +60,7 @@ func PrintTable(spec *Spec, fullData interface{}) error {
 			if err != nil {
 				value = nil
 			}
-			fmt.Printf("%*v ", column.Width, value)
+			fmt.Printf("%*v ", -column.Width, value)
 		}
 		fmt.Println("")
 	}
