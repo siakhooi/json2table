@@ -8,10 +8,14 @@ convert json data to tabular format
 go install github.com/siakhooi/json2table/cmd/json2table@latest
 ```
 
-### Quality
+## Quality
 
 - https://sonarcloud.io/project/overview?id=siakhooi_json2table
 - https://qlty.sh/gh/siakhooi/projects/json2table
+
+## Deliverables
+
+- https://pkg.go.dev/github.com/siakhooi/json2table
 
 ## Badges
 
