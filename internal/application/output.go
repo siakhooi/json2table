@@ -24,7 +24,11 @@ func selectDataArray(dataPath string, fullData interface{}) ([]interface{}, erro
 
 func printHeader(columns []Column) {
 	for _, column := range columns {
-		fmt.Printf("%*s ", -column.Width, column.Title)
+		title := column.Title
+		if len(title) > column.Width {
+			title = title[:column.Width]
+		}
+		fmt.Printf("%*s ", -column.Width, title)
 	}
 	fmt.Println("")
 }
@@ -44,6 +48,17 @@ func analyseData(spec *Spec, dataArray []interface{}) {
 	}
 }
 
+func optimizeSpec(spec *Spec) {
+	for i, column := range spec.Columns {
+		if column.MinWidth > 0 && column.Width < column.MinWidth {
+			spec.Columns[i].Width = column.MinWidth
+		}
+		if column.MaxWidth > 0 && column.Width > column.MaxWidth {
+			spec.Columns[i].Width = column.MaxWidth
+		}
+	}
+}
+
 // PrintTable prints JSON data in tabular format based on the provided specification
 func PrintTable(spec *Spec, fullData interface{}) error {
 	dataArray, err := selectDataArray(spec.DataPath, fullData)
@@ -51,6 +66,7 @@ func PrintTable(spec *Spec, fullData interface{}) error {
 		return err
 	}
 	analyseData(spec, dataArray)
+	optimizeSpec(spec)
 
 	printHeader(spec.Columns)
 
@@ -60,7 +76,11 @@ func PrintTable(spec *Spec, fullData interface{}) error {
 			if err != nil {
 				value = nil
 			}
-			fmt.Printf("%*v ", -column.Width, value)
+			valueStr := fmt.Sprintf("%v", value)
+			if len(valueStr) > column.Width {
+				valueStr = valueStr[:column.Width]
+			}
+			fmt.Printf("%*s ", -column.Width, valueStr)
 		}
 		fmt.Println("")
 	}

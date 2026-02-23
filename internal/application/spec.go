@@ -6,6 +6,7 @@ package application
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"os"
 	"strings"
 
@@ -14,8 +15,10 @@ import (
 
 // Column represents a column specification
 type Column struct {
-	Path  string `json:"path" validate:"required"`
-	Title string `json:"title"`
+	Path     string `json:"path" validate:"required"`
+	Title    string `json:"title"`
+	MinWidth int    `json:"minWidth" validate:"min=0,ltefield=MaxWidth"`
+	MaxWidth int    `json:"maxWidth" validate:"min=0,gtefield=MinWidth"`
 
 	Width int
 }
@@ -36,6 +39,9 @@ func (c *Column) setDefaults() {
 		}
 	}
 	c.Width = len(c.Title)
+	if c.MaxWidth == 0 {
+		c.MaxWidth = math.MaxInt
+	}
 }
 func (s *Spec) setDefaults() {
 	if s.DataPath == "" {
@@ -73,9 +79,7 @@ func ValidateSpec(spec *Spec) error {
 
 	validate := validator.New(validator.WithRequiredStructEnabled())
 
-	err := validate.Struct(spec)
-
-	return err
+	return validate.Struct(spec)
 }
 
 // ReadSpec reads a spec file
