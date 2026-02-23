@@ -4,9 +4,12 @@ convert json data to tabular format
 
 ## Installation
 
-```
-go install github.com/siakhooi/json2table/cmd/json2table@latest
-```
+To install `json2table`, visit the [Release page](https://github.com/siakhooi/json2table/releases) and download the appropriate binary for your operating system and architecture.
+
+1. Go to the [Release page](https://github.com/siakhooi/json2table/releases).
+2. Find the latest release and download the binary matching your OS and CPU architecture.
+3. Extract the downloaded file and move the binary to a directory in your `$PATH` (e.g., `/usr/local/bin`).
+4. Verify installation by running `json2table --version`.
 
 ## Quality
 
