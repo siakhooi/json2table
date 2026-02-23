@@ -43,8 +43,10 @@ run-1:
 run-2:
 	bin/json2table-linux-amd64 --spec ./samples/spec1.json ./samples/data1.json
 run-3:
-	cat ./samples/data1.json |bin/json2table-linux-amd64 -s ./samples/spec1.json 
+	cat ./samples/data1.json |bin/json2table-linux-amd64 -s ./samples/spec1.json
 run-4:
 	JSON2TABLE_SPEC_FILE=./samples/spec1.json bin/json2table-linux-amd64 ./samples/data1.json
 run-5:
 	cat  ./samples/data1.json |JSON2TABLE_SPEC_FILE=./samples/spec1.json bin/json2table-linux-amd64
+run-6:
+	JSON2TABLE_SPEC='{"dataPath":"$.data2","columns":[{"path":"id","title":"ID"},{"path":"display.name"}]}' bin/json2table-linux-amd64 ./samples/data1.json

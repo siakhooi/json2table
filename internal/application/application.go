@@ -37,7 +37,7 @@ func action(_ context.Context, c *cli.Command) error {
 		return err
 	}
 
-	spec, err := ReadParseValidateSpec(args.SpecFile)
+	spec, err := ReadParseValidateSpec(args.SpecFile, args.EnvSpec)
 	if err != nil {
 		return err
 	}
@@ -57,7 +57,7 @@ func flags() []cli.Flag {
 		&cli.StringFlag{
 			Name:    "spec",
 			Aliases: []string{"s"},
-			Usage:   "read spec from specFile.json, or from environment variable JSON2TABLE_SPEC_FILE if not provided",
+			Usage:   "read spec from specFile.json, or from environment variable JSON2TABLE_SPEC or JSON2TABLE_SPEC_FILE if not provided",
 		},
 	}
 }

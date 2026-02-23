@@ -14,10 +14,13 @@ import (
 type Arguments struct {
 	SpecFile string
 	DataFile string
+	EnvSpec  string
 }
 
 // ParseArguments parses CLI arguments, validates them into an Arguments struct
 func ParseArguments(c *cli.Command) (Arguments, error) {
+	envSpec := os.Getenv("JSON2TABLE_SPEC")
+
 	specFile := ValidateSpecFile(c.String("spec"))
 
 	argumentsList := c.Args().Slice()
@@ -26,12 +29,8 @@ func ParseArguments(c *cli.Command) (Arguments, error) {
 		return Arguments{}, err
 	}
 
-	args := Arguments{
-		SpecFile: specFile,
-		DataFile: dataFile,
-	}
-	if specFile == "" {
-		return Arguments{}, fmt.Errorf("spec is mandatory: provide -s/--spec flag or set JSON2TABLE_SPEC_FILE environment variable")
+	if specFile == "" && envSpec == "" {
+		return Arguments{}, fmt.Errorf("spec is mandatory: provide -s/--spec flag or set JSON2TABLE_SPEC or JSON2TABLE_SPEC_FILE environment variable")
 	}
 	if len(argumentsList) > 1 {
 		return Arguments{}, fmt.Errorf("too many arguments: only one data file argument is allowed")
@@ -40,11 +39,16 @@ func ParseArguments(c *cli.Command) (Arguments, error) {
 		return Arguments{}, fmt.Errorf("data file is required: provide a data file argument or pipe data to stdin")
 	}
 
+	args := Arguments{
+		SpecFile: specFile,
+		DataFile: dataFile,
+		EnvSpec:  envSpec,
+	}
+
 	return args, nil
 }
 
 // ValidateSpecFile validates the spec file option
-// Requires either the specFile parameter or JSON2TABLE_SPEC_FILE environment variable to be set
 func ValidateSpecFile(specFile string) string {
 	// If specFile is provided via CLI flag, use it
 	if specFile != "" {

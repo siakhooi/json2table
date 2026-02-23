@@ -89,12 +89,15 @@ func ReadSpec(specFile string) ([]byte, error) {
 }
 
 // ReadParseValidateSpec reads a spec file, parses it, and validates it
-func ReadParseValidateSpec(specFile string) (*Spec, error) {
-	data, err := ReadSpec(specFile)
-	if err != nil {
-		return nil, err
+func ReadParseValidateSpec(specFile string, envSpec string) (*Spec, error) {
+	data := []byte(envSpec)
+	if envSpec == "" {
+		var err error
+		data, err = ReadSpec(specFile)
+		if err != nil {
+			return nil, err
+		}
 	}
-
 	spec, err := ParseAndValidateSpec(data)
 	if err != nil {
 		return nil, err
