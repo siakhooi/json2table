@@ -59,17 +59,7 @@ func optimizeSpec(spec *Spec) {
 	}
 }
 
-// PrintTable prints JSON data in tabular format based on the provided specification
-func PrintTable(spec *Spec, fullData interface{}) error {
-	dataArray, err := selectDataArray(spec.DataPath, fullData)
-	if err != nil {
-		return err
-	}
-	analyseData(spec, dataArray)
-	optimizeSpec(spec)
-
-	printHeader(spec.Columns)
-
+func printData(dataArray []interface{}, spec *Spec) {
 	for _, item := range dataArray {
 		for _, column := range spec.Columns {
 			value, err := jsonpath.Get(column.Path, item)
@@ -84,5 +74,20 @@ func PrintTable(spec *Spec, fullData interface{}) error {
 		}
 		fmt.Println("")
 	}
+
+}
+
+// PrintTable prints JSON data in tabular format based on the provided specification
+func PrintTable(spec *Spec, fullData interface{}) error {
+	dataArray, err := selectDataArray(spec.DataPath, fullData)
+	if err != nil {
+		return err
+	}
+	analyseData(spec, dataArray)
+	optimizeSpec(spec)
+
+	printHeader(spec.Columns)
+	printData(dataArray, spec)
+
 	return nil
 }
