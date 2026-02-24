@@ -25,10 +25,10 @@ func selectDataArray(dataPath string, fullData interface{}) ([]interface{}, erro
 func printHeader(columns []Column) {
 	for _, column := range columns {
 		title := column.Title
-		if len(title) > column.Width {
-			title = title[:column.Width]
-		}
-		fmt.Printf("%*s ", -column.Width, title)
+		prefix, printValue, suffix := getPrintables(fmt.Sprintf("%v", title), column.Width)
+
+		fmt.Printf("%s%s%s ", prefix, printValue, suffix)
+
 	}
 	fmt.Println("")
 }
@@ -59,6 +59,21 @@ func optimizeSpec(spec *Spec) {
 	}
 }
 
+func getPrintables(value string, width int) (string, string, string) {
+	shortvalue := value
+	if len(value) > width {
+		shortvalue = value[:width]
+	}
+	prefix := ""
+	suffix := ""
+	if len(shortvalue) < width {
+		padding := width - len(shortvalue)
+		suffix = fmt.Sprintf("%*s", padding, "")
+	}
+
+	return prefix, shortvalue, suffix
+}
+
 func printData(dataArray []interface{}, spec *Spec) {
 	for _, item := range dataArray {
 		for _, column := range spec.Columns {
@@ -66,11 +81,8 @@ func printData(dataArray []interface{}, spec *Spec) {
 			if err != nil {
 				value = nil
 			}
-			valueStr := fmt.Sprintf("%v", value)
-			if len(valueStr) > column.Width {
-				valueStr = valueStr[:column.Width]
-			}
-			fmt.Printf("%*s ", -column.Width, valueStr)
+			prefix, printValue, suffix := getPrintables(fmt.Sprintf("%v", value), column.Width)
+			fmt.Printf("%s%s%s ", prefix, printValue, suffix)
 		}
 		fmt.Println("")
 	}
