@@ -11,6 +11,24 @@ To install `json2table`, visit the [Release page](https://github.com/siakhooi/js
 3. Extract the downloaded file and move the binary to a directory in your `$PATH` (e.g., `/usr/local/bin`).
 4. Verify installation by running `json2table --version`.
 
+## Usage
+```
+NAME:
+   json2table - convert json data to tabular format
+
+USAGE:
+   json2table [global options] [dataFile]
+
+VERSION:
+   v0.2.0
+
+GLOBAL OPTIONS:
+   --build                   print build info and exit
+   --spec string, -s string  read spec from specFile.json, or from environment variable JSON2TABLE_SPEC or JSON2TABLE_SPEC_FILE if not provided
+   --help, -h                show help
+   --version, -v             print the version
+```
+
 ## Quality
 
 - https://sonarcloud.io/project/overview?id=siakhooi_json2table
@@ -66,6 +84,5 @@ To install `json2table`, visit the [Release page](https://github.com/siakhooi/js
 ![Sonar Violations (short format)](https://img.shields.io/sonar/info_violations/siakhooi_json2table?server=https%3A%2F%2Fsonarcloud.io)
 ![Sonar Violations (long format)](https://img.shields.io/sonar/violations/siakhooi_json2table?format=long&server=http%3A%2F%2Fsonarcloud.io)
 
-[![Generic badge](https://img.shields.io/badge/Funding-BuyMeACoffee-33cb56.svg)](https://www.buymeacoffee.com/siakhooi)
-[![Generic badge](https://img.shields.io/badge/Funding-Ko%20Fi-33cb56.svg)](https://ko-fi.com/siakhooi)
+[![Wise](https://img.shields.io/badge/Funding-Wise-33cb56.svg?logo=wise)](https://wise.com/pay/me/siakn3)
 ![visitors](https://hit-tztugwlsja-uc.a.run.app/?outputtype=badge&counter=ghmd-json2table)
