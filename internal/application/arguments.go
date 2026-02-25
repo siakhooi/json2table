@@ -4,6 +4,7 @@ Package application run the application
 package application
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -29,14 +30,18 @@ func ParseArguments(c *cli.Command) (Arguments, error) {
 		return Arguments{}, err
 	}
 
+	var errs []error
 	if specFile == "" && envSpec == "" {
-		return Arguments{}, fmt.Errorf("spec is mandatory: provide -s/--spec flag or set JSON2TABLE_SPEC or JSON2TABLE_SPEC_FILE environment variable")
+		errs = append(errs, fmt.Errorf("spec is mandatory: provide -s/--spec flag or set JSON2TABLE_SPEC or JSON2TABLE_SPEC_FILE environment variable"))
 	}
 	if len(argumentsList) > 1 {
-		return Arguments{}, fmt.Errorf("too many arguments: only one data file argument is allowed")
+		errs = append(errs, fmt.Errorf("too many arguments: only one data file argument is allowed"))
 	}
 	if dataFile == "" {
-		return Arguments{}, fmt.Errorf("data file is required: provide a data file argument or pipe data to stdin")
+		errs = append(errs, fmt.Errorf("data file is required: provide a data file argument or pipe data to stdin"))
+	}
+	if len(errs) > 0 {
+		return Arguments{}, errors.Join(errs...)
 	}
 
 	args := Arguments{
