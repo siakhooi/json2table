@@ -36,13 +36,19 @@ func printHeader(columns []Column) {
 func analyseData(spec *Spec, dataArray []interface{}) {
 	for _, item := range dataArray {
 		for i, column := range spec.Columns {
-			value, err := jsonpath.Get(column.Path, item)
-			if err != nil {
-				continue
-			}
-			valueStr := fmt.Sprintf("%v", value)
-			if len(valueStr) > column.Width {
-				spec.Columns[i].Width = len(valueStr)
+			for _, path := range column.Path {
+				value, err := jsonpath.Get(path, item)
+				if err != nil {
+					continue
+				}
+				if value == nil {
+					continue
+				}
+				valueStr := fmt.Sprintf("%v", value)
+				if len(valueStr) > column.Width {
+					spec.Columns[i].Width = len(valueStr)
+				}
+				break
 			}
 		}
 	}
@@ -77,9 +83,13 @@ func getPrintables(value string, width int) (string, string, string) {
 func printData(dataArray []interface{}, spec *Spec) {
 	for _, item := range dataArray {
 		for _, column := range spec.Columns {
-			value, err := jsonpath.Get(column.Path, item)
-			if err != nil {
-				value = nil
+			var value interface{}
+			for _, path := range column.Path {
+				v, err := jsonpath.Get(path, item)
+				if err == nil && v != nil {
+					value = v
+					break
+				}
 			}
 			prefix, printValue, suffix := getPrintables(fmt.Sprintf("%v", value), column.Width)
 			fmt.Printf("%s%s%s ", prefix, printValue, suffix)

@@ -13,12 +13,33 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+// StringOrStringArray is a custom type that can unmarshal from either a string or []string
+type StringOrStringArray []string
+
+// UnmarshalJSON implements json.Unmarshaler for StringOrStringArray
+func (s *StringOrStringArray) UnmarshalJSON(data []byte) error {
+	// Try to unmarshal as a string first
+	var str string
+	if err := json.Unmarshal(data, &str); err == nil {
+		*s = []string{str}
+		return nil
+	}
+
+	// Try to unmarshal as a string array
+	var arr []string
+	if err := json.Unmarshal(data, &arr); err != nil {
+		return err
+	}
+	*s = arr
+	return nil
+}
+
 // Column represents a column specification
 type Column struct {
-	Path     string `json:"path" validate:"required"`
-	Title    string `json:"title"`
-	MinWidth int    `json:"minWidth" validate:"min=0,ltefield=MaxWidth"`
-	MaxWidth int    `json:"maxWidth" validate:"min=0,gtefield=MinWidth"`
+	Path     StringOrStringArray `json:"path" validate:"required"`
+	Title    string              `json:"title"`
+	MinWidth int                 `json:"minWidth" validate:"min=0,ltefield=MaxWidth"`
+	MaxWidth int                 `json:"maxWidth" validate:"min=0,gtefield=MinWidth"`
 
 	Width int
 }
@@ -31,11 +52,11 @@ type Spec struct {
 
 func (c *Column) setDefaults() {
 	if c.Title == "" {
-		parts := strings.Split(c.Path, ".")
+		parts := strings.Split(c.Path[0], ".")
 		if len(parts) > 1 {
 			c.Title = parts[len(parts)-1]
 		} else {
-			c.Title = c.Path
+			c.Title = c.Path[0]
 		}
 	}
 	c.Width = len(c.Title)

@@ -40,6 +40,8 @@ run-too-many-arguments-2:
 	bin/json2table-linux-amd64 -s ./samples/spec.json ./samples/data1.json ./samples/data1.json
 run-1:
 	bin/json2table-linux-amd64 -s ./samples/spec1.json ./samples/data1.json
+run-1a:
+	bin/json2table-linux-amd64 -s ./samples/spec2.json ./samples/data1.json
 run-2:
 	bin/json2table-linux-amd64 --spec ./samples/spec1.json ./samples/data1.json
 run-3:
