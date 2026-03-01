@@ -25,7 +25,7 @@ func selectDataArray(dataPath string, fullData interface{}) ([]interface{}, erro
 func printHeader(columns []Column) {
 	for _, column := range columns {
 		title := column.Title
-		prefix, printValue, suffix := getPrintables(fmt.Sprintf("%v", title), column.Width)
+		prefix, printValue, suffix := getPrintables(fmt.Sprintf("%v", title), column.Width, column.Align)
 
 		fmt.Printf("%s%s%s ", prefix, printValue, suffix)
 
@@ -65,7 +65,7 @@ func optimizeSpec(spec *Spec) {
 	}
 }
 
-func getPrintables(value string, width int) (string, string, string) {
+func getPrintables(value string, width int, align Alignment) (string, string, string) {
 	shortvalue := value
 	if len(value) > width {
 		shortvalue = value[:width]
@@ -74,7 +74,17 @@ func getPrintables(value string, width int) (string, string, string) {
 	suffix := ""
 	if len(shortvalue) < width {
 		padding := width - len(shortvalue)
-		suffix = fmt.Sprintf("%*s", padding, "")
+		switch align {
+		case AlignRight:
+			prefix = fmt.Sprintf("%*s", padding, "")
+		case AlignCenter:
+			leftPad := padding / 2
+			rightPad := padding - leftPad
+			prefix = fmt.Sprintf("%*s", leftPad, "")
+			suffix = fmt.Sprintf("%*s", rightPad, "")
+		default: // AlignLeft
+			suffix = fmt.Sprintf("%*s", padding, "")
+		}
 	}
 
 	return prefix, shortvalue, suffix
@@ -91,7 +101,7 @@ func printData(dataArray []interface{}, spec *Spec) {
 					break
 				}
 			}
-			prefix, printValue, suffix := getPrintables(fmt.Sprintf("%v", value), column.Width)
+			prefix, printValue, suffix := getPrintables(fmt.Sprintf("%v", value), column.Width, column.Align)
 			fmt.Printf("%s%s%s ", prefix, printValue, suffix)
 		}
 		fmt.Println("")

@@ -4,11 +4,18 @@
         {
             "path": "id",
             "title": "ID",
-            "minWidth": 8
+            "minWidth": 8,
+            "align": "center"
         },
         {
             "path": "display.name",
-            "maxWidth": 8
+            "maxWidth": 8,
+            "align": "left"
+        },
+        {
+            "path": "desc",
+            "maxWidth": 20,
+            "align": "right"
         }
     ]
 }

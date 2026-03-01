@@ -13,6 +13,18 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+// Alignment represents text alignment in a column
+type Alignment string
+
+const (
+	// AlignLeft aligns text to the left
+	AlignLeft Alignment = "left"
+	// AlignRight aligns text to the right
+	AlignRight Alignment = "right"
+	// AlignCenter aligns text to the center
+	AlignCenter Alignment = "center"
+)
+
 // StringOrStringArray is a custom type that can unmarshal from either a string or []string
 type StringOrStringArray []string
 
@@ -40,6 +52,7 @@ type Column struct {
 	Title    string              `json:"title"`
 	MinWidth int                 `json:"minWidth" validate:"min=0,ltefield=MaxWidth"`
 	MaxWidth int                 `json:"maxWidth" validate:"min=0,gtefield=MinWidth"`
+	Align    Alignment           `json:"align" validate:"omitempty,oneof=left right center"`
 
 	Width int
 }
@@ -62,6 +75,9 @@ func (c *Column) setDefaults() {
 	c.Width = len(c.Title)
 	if c.MaxWidth == 0 {
 		c.MaxWidth = math.MaxInt
+	}
+	if c.Align == "" {
+		c.Align = AlignLeft
 	}
 }
 func (s *Spec) setDefaults() {
