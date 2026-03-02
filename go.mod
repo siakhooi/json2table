@@ -5,7 +5,7 @@ go 1.25.7
 require (
 	github.com/PaesslerAG/jsonpath v0.1.1
 	github.com/go-playground/validator/v10 v10.30.1
-	github.com/urfave/cli/v3 v3.6.2
+	github.com/urfave/cli/v3 v3.7.0
 )
 
 require (
