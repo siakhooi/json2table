@@ -131,7 +131,7 @@ func ReadSpec(specFile string) ([]byte, error) {
 }
 
 // ReadParseValidateSpec reads a spec file, parses it, and validates it
-func ReadParseValidateSpec(specFile string, envSpec string) (*Spec, error) {
+func ReadParseValidateSpec(specFile, envSpec string) (*Spec, error) {
 	data := []byte(envSpec)
 	if envSpec == "" {
 		var err error
