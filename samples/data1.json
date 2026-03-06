@@ -12,6 +12,7 @@
         {
             "id": 2,
             "desc": "desc2",
+            "url": "http://example.com/item2",
             "display": {
                 "name1": "foo"
             }
@@ -26,6 +27,7 @@
         {
             "id": 46666,
             "desc": "desc46666",
+            "url": "http://example.com/item46666",
             "display": {
                 "name": "ninnyhammer"
             }

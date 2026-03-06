@@ -5,7 +5,11 @@
             "path": "id",
             "title": "ID",
             "minWidth": 8,
-            "align": "center"
+            "align": "center",
+            "urlPath": "url"
+        },
+        {
+            "path": "url"
         },
         {
             "path": "display.name",

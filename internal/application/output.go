@@ -101,7 +101,16 @@ func printData(dataArray []interface{}, spec *Spec) {
 					break
 				}
 			}
-			prefix, printValue, suffix := getPrintables(fmt.Sprintf("%v", value), column.Width, column.Align)
+			valueStr := fmt.Sprintf("%v", value)
+			prefix, printValue, suffix := getPrintables(valueStr, column.Width, column.Align)
+			urlPath := column.URLPath
+			if urlPath != "" {
+				urlValue, err := jsonpath.Get(urlPath, item)
+				if err == nil && urlValue != nil {
+					urlStr := fmt.Sprintf("%v", urlValue)
+					printValue = GetLink(printValue, urlStr)
+				}
+			}
 			fmt.Printf("%s%s%s ", prefix, printValue, suffix)
 		}
 		fmt.Println("")

@@ -38,6 +38,9 @@ GLOBAL OPTIONS:
 
 - https://pkg.go.dev/github.com/siakhooi/json2table
 
+## Reference
+- https://github.com/savioxavier/termlink
+
 ## Badges
 
 ![GitHub](https://img.shields.io/github/license/siakhooi/json2table?logo=github)
