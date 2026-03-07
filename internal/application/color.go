@@ -79,6 +79,25 @@ const (
 	ColorHiBgWhite SupportedColor = "hiBgWhite"
 	// ColorHiBgBlack represents high intensity black background color
 	ColorHiBgBlack SupportedColor = "hiBgBlack"
+
+	// ColorBold represents bold text
+	ColorBold SupportedColor = "bold"
+	// ColorFaint represents faint text
+	ColorFaint SupportedColor = "faint"
+	// ColorItalic represents italic text
+	ColorItalic SupportedColor = "italic"
+	// ColorUnderline represents underlined text
+	ColorUnderline SupportedColor = "underline"
+	// ColorBlinkSlow represents slow blinking text
+	ColorBlinkSlow SupportedColor = "blinkSlow"
+	// ColorBlinkRapid represents rapid blinking text
+	ColorBlinkRapid SupportedColor = "blinkRapid"
+	// ColorReverseVideo represents reverse video text
+	ColorReverseVideo SupportedColor = "reverseVideo"
+	// ColorConcealed represents concealed text
+	ColorConcealed SupportedColor = "concealed"
+	// ColorCrossedOut represents crossed out text
+	ColorCrossedOut SupportedColor = "crossedOut"
 )
 
 type colorMeta struct {
@@ -86,39 +105,48 @@ type colorMeta struct {
 }
 
 var supportedColorMeta = map[SupportedColor]colorMeta{
-	ColorDefault:     {color: color.Reset},
-	ColorRed:         {color: color.FgRed},
-	ColorGreen:       {color: color.FgGreen},
-	ColorBlue:        {color: color.FgBlue},
-	ColorYellow:      {color: color.FgYellow},
-	ColorMagenta:     {color: color.FgMagenta},
-	ColorCyan:        {color: color.FgCyan},
-	ColorWhite:       {color: color.FgWhite},
-	ColorBlack:       {color: color.FgBlack},
-	ColorHiRed:       {color: color.FgHiRed},
-	ColorHiGreen:     {color: color.FgHiGreen},
-	ColorHiBlue:      {color: color.FgHiBlue},
-	ColorHiYellow:    {color: color.FgHiYellow},
-	ColorHiMagenta:   {color: color.FgHiMagenta},
-	ColorHiCyan:      {color: color.FgHiCyan},
-	ColorHiWhite:     {color: color.FgHiWhite},
-	ColorHiBlack:     {color: color.FgHiBlack},
-	ColorBgRed:       {color: color.BgRed},
-	ColorBgGreen:     {color: color.BgGreen},
-	ColorBgBlue:      {color: color.BgBlue},
-	ColorBgYellow:    {color: color.BgYellow},
-	ColorBgMagenta:   {color: color.BgMagenta},
-	ColorBgCyan:      {color: color.BgCyan},
-	ColorBgWhite:     {color: color.BgWhite},
-	ColorBgBlack:     {color: color.BgBlack},
-	ColorHiBgRed:     {color: color.BgHiRed},
-	ColorHiBgGreen:   {color: color.BgHiGreen},
-	ColorHiBgBlue:    {color: color.BgHiBlue},
-	ColorHiBgYellow:  {color: color.BgHiYellow},
-	ColorHiBgMagenta: {color: color.BgHiMagenta},
-	ColorHiBgCyan:    {color: color.BgHiCyan},
-	ColorHiBgWhite:   {color: color.BgHiWhite},
-	ColorHiBgBlack:   {color: color.BgHiBlack},
+	ColorDefault:      {color: color.Reset},
+	ColorRed:          {color: color.FgRed},
+	ColorGreen:        {color: color.FgGreen},
+	ColorBlue:         {color: color.FgBlue},
+	ColorYellow:       {color: color.FgYellow},
+	ColorMagenta:      {color: color.FgMagenta},
+	ColorCyan:         {color: color.FgCyan},
+	ColorWhite:        {color: color.FgWhite},
+	ColorBlack:        {color: color.FgBlack},
+	ColorHiRed:        {color: color.FgHiRed},
+	ColorHiGreen:      {color: color.FgHiGreen},
+	ColorHiBlue:       {color: color.FgHiBlue},
+	ColorHiYellow:     {color: color.FgHiYellow},
+	ColorHiMagenta:    {color: color.FgHiMagenta},
+	ColorHiCyan:       {color: color.FgHiCyan},
+	ColorHiWhite:      {color: color.FgHiWhite},
+	ColorHiBlack:      {color: color.FgHiBlack},
+	ColorBgRed:        {color: color.BgRed},
+	ColorBgGreen:      {color: color.BgGreen},
+	ColorBgBlue:       {color: color.BgBlue},
+	ColorBgYellow:     {color: color.BgYellow},
+	ColorBgMagenta:    {color: color.BgMagenta},
+	ColorBgCyan:       {color: color.BgCyan},
+	ColorBgWhite:      {color: color.BgWhite},
+	ColorBgBlack:      {color: color.BgBlack},
+	ColorHiBgRed:      {color: color.BgHiRed},
+	ColorHiBgGreen:    {color: color.BgHiGreen},
+	ColorHiBgBlue:     {color: color.BgHiBlue},
+	ColorHiBgYellow:   {color: color.BgHiYellow},
+	ColorHiBgMagenta:  {color: color.BgHiMagenta},
+	ColorHiBgCyan:     {color: color.BgHiCyan},
+	ColorHiBgWhite:    {color: color.BgHiWhite},
+	ColorHiBgBlack:    {color: color.BgHiBlack},
+	ColorBold:         {color: color.Bold},
+	ColorFaint:        {color: color.Faint},
+	ColorItalic:       {color: color.Italic},
+	ColorUnderline:    {color: color.Underline},
+	ColorBlinkSlow:    {color: color.BlinkSlow},
+	ColorBlinkRapid:   {color: color.BlinkRapid},
+	ColorReverseVideo: {color: color.ReverseVideo},
+	ColorConcealed:    {color: color.Concealed},
+	ColorCrossedOut:   {color: color.CrossedOut},
 }
 
 // GetColored returns the printValue wrapped in color codes based on the color string
