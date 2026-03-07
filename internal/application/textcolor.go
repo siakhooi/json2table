@@ -4,7 +4,6 @@ Package application run the application
 package application
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/fatih/color"
@@ -26,8 +25,8 @@ var DefaultTextColor = TextColor{
 // UnmarshalJSON implements json.Unmarshaler for TextColor
 func (s *TextColor) UnmarshalJSON(data []byte) error {
 	// Try to unmarshal as a string first
-	var str string
-	if err := json.Unmarshal(data, &str); err == nil {
+	str, err := UnmarshalAsString(data)
+	if err == nil {
 		parsed := supportedColor(str)
 		if !isSupportedColor(parsed) {
 			return fmt.Errorf("invalid color: %q", str)
@@ -40,8 +39,8 @@ func (s *TextColor) UnmarshalJSON(data []byte) error {
 	}
 
 	// Try to unmarshal as a string array
-	var arr []string
-	if err := json.Unmarshal(data, &arr); err != nil {
+	arr, err := UnmarshalAsStringArray(data)
+	if err != nil {
 		return err
 	}
 	*s = TextColor{

@@ -19,15 +19,15 @@ type StringOrStringArray []string
 // UnmarshalJSON implements json.Unmarshaler for StringOrStringArray
 func (s *StringOrStringArray) UnmarshalJSON(data []byte) error {
 	// Try to unmarshal as a string first
-	var str string
-	if err := json.Unmarshal(data, &str); err == nil {
+	str, err := UnmarshalAsString(data)
+	if err == nil {
 		*s = []string{str}
 		return nil
 	}
 
 	// Try to unmarshal as a string array
-	var arr []string
-	if err := json.Unmarshal(data, &arr); err != nil {
+	arr, err := UnmarshalAsStringArray(data)
+	if err != nil {
 		return err
 	}
 	*s = arr
