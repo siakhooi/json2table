@@ -10,8 +10,7 @@ import (
 	"os"
 )
 
-// ReadData reads a data file
-func ReadData(dataFilePath string) ([]byte, error) {
+func readData(dataFilePath string) ([]byte, error) {
 	if dataFilePath == "-" {
 		// read from stdin
 		data, err := io.ReadAll(os.Stdin)
@@ -35,8 +34,7 @@ func ReadData(dataFilePath string) ([]byte, error) {
 
 }
 
-// ParseData parses JSON data into an interface{}
-func ParseData(data []byte) (interface{}, error) {
+func parseData(data []byte) (interface{}, error) {
 	var jsonData interface{}
 	err := json.Unmarshal(data, &jsonData)
 	if err != nil {
@@ -47,9 +45,9 @@ func ParseData(data []byte) (interface{}, error) {
 
 // ReadParseData reads a data file and parses it into an interface{}
 func ReadParseData(dataFilePath string) (interface{}, error) {
-	data, err := ReadData(dataFilePath)
+	data, err := readData(dataFilePath)
 	if err != nil {
 		return nil, err
 	}
-	return ParseData(data)
+	return parseData(data)
 }
