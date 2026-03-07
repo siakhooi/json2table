@@ -48,7 +48,7 @@ func (c *Column) setDefaults() {
 	if c.Align == "" {
 		c.Align = DefaultAlignment
 	}
-	if len(c.Color.Color) == 0 {
+	if len(c.Color.Default) == 0 {
 		c.Color = DefaultTextColor
 	}
 }
@@ -107,7 +107,7 @@ func validateSpecFileValues(spec *Spec) error {
 			return fmt.Errorf("column %d: invalid align value: %q", i, col.Align)
 		}
 
-		for _, c := range col.Color.Color {
+		for _, c := range col.Color.Default {
 			if !isValidTextColor(c) {
 				return fmt.Errorf("column %d: invalid color value: %q", i, c)
 			}

@@ -9,13 +9,13 @@ import (
 
 // TextColorSpec represents text color specification
 type TextColorSpec struct {
-	Type  colorType
-	Color StringList `json:"color"`
+	Type    colorType
+	Default StringList `json:"color"`
 }
 
 // DefaultTextColor is the default color (no color)
 var DefaultTextColor = TextColorSpec{
-	Type: colorTypeFixed, Color: StringList{ColorDefault},
+	Type: colorTypeFixed, Default: StringList{ColorDefault},
 }
 
 type colorType int
@@ -30,8 +30,8 @@ func (s *TextColorSpec) UnmarshalJSON(data []byte) error {
 	str, err := UnmarshalAsString(data)
 	if err == nil {
 		*s = TextColorSpec{
-			Type:  colorTypeFixed,
-			Color: StringList{str},
+			Type:    colorTypeFixed,
+			Default: StringList{str},
 		}
 		return nil
 	}
@@ -42,8 +42,8 @@ func (s *TextColorSpec) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = TextColorSpec{
-		Type:  colorTypeFixed,
-		Color: arr,
+		Type:    colorTypeFixed,
+		Default: arr,
 	}
 	return nil
 }
@@ -191,7 +191,7 @@ var supportedColorMeta = map[string]colorMeta{
 
 // GetColored returns the printValue wrapped in color codes based on the color string
 func GetColored(printValue string, textColor TextColorSpec) any {
-	s := textColor.Color
+	s := textColor.Default
 	colors := make([]color.Attribute, 0, len(s))
 	for _, c := range s {
 		meta, ok := supportedColorMeta[c]
