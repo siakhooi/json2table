@@ -10,7 +10,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/fatih/color"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -25,31 +24,6 @@ const (
 	// AlignCenter aligns text to the center
 	AlignCenter Alignment = "center"
 )
-
-// SupportedColor represents text color in a column
-type SupportedColor string
-
-const (
-	// Red represents red color
-	Red SupportedColor = "red"
-	// Green represents green color
-	Green SupportedColor = "green"
-	// Blue represents blue color
-	Blue SupportedColor = "blue"
-	// Default represents default color (no color)
-	Default SupportedColor = "default"
-)
-
-type colorMeta struct {
-	color color.Attribute
-}
-
-// SupportedColorMeta is a list of supported colors
-var SupportedColorMeta = map[SupportedColor]colorMeta{
-	Red:   {color: color.FgRed},
-	Green: {color: color.FgGreen},
-	Blue:  {color: color.FgBlue},
-}
 
 // StringOrStringArray is a custom type that can unmarshal from either a string or []string
 type StringOrStringArray []string
@@ -108,7 +82,7 @@ func (c *Column) setDefaults() {
 		c.Align = AlignLeft
 	}
 	if c.Color == "" {
-		c.Color = Default
+		c.Color = ColorDefault
 	}
 }
 func (s *Spec) setDefaults() {
