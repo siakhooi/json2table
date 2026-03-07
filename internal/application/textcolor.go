@@ -13,14 +13,20 @@ type supportedColor string
 
 // TextColor represents text color specification
 type TextColor struct {
-	Type  string           `json:"type"`
+	Type  colorType
 	Color []supportedColor `json:"color"`
 }
 
 // DefaultTextColor is the default color (no color)
 var DefaultTextColor = TextColor{
-	Type: "fixed", Color: []supportedColor{ColorDefault},
+	Type: colorTypeFixed, Color: []supportedColor{ColorDefault},
 }
+
+type colorType int
+
+const (
+	colorTypeFixed colorType = iota
+)
 
 // UnmarshalJSON implements json.Unmarshaler for TextColor
 func (s *TextColor) UnmarshalJSON(data []byte) error {
@@ -32,7 +38,7 @@ func (s *TextColor) UnmarshalJSON(data []byte) error {
 			return fmt.Errorf("invalid color: %q", str)
 		}
 		*s = TextColor{
-			Type:  "fixed",
+			Type:  colorTypeFixed,
 			Color: []supportedColor{parsed},
 		}
 		return nil
@@ -44,7 +50,7 @@ func (s *TextColor) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = TextColor{
-		Type:  "fixed",
+		Type:  colorTypeFixed,
 		Color: make([]supportedColor, len(arr)),
 	}
 	for i, v := range arr {
