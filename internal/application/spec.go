@@ -82,7 +82,7 @@ func (c *Column) setDefaults() {
 		c.Align = AlignLeft
 	}
 	if c.Color == nil {
-		c.Color = []SupportedColor{ColorDefault}
+		c.Color = DefaultTextColor
 	}
 }
 func (s *Spec) setDefaults() {

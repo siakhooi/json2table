@@ -16,6 +16,9 @@ type SupportedColor string
 // SupportedColorArray represents an array of supported colors
 type SupportedColorArray []SupportedColor
 
+// DefaultTextColor is the default color (no color)
+var DefaultTextColor = []SupportedColor{ColorDefault}
+
 // UnmarshalJSON implements json.Unmarshaler for SupportedColorArray
 func (s *SupportedColorArray) UnmarshalJSON(data []byte) error {
 	// Try to unmarshal as a string first
