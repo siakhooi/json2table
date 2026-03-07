@@ -25,7 +25,7 @@ func selectDataArray(dataPath string, fullData interface{}) ([]interface{}, erro
 func printHeader(columns []Column) {
 	for _, column := range columns {
 		title := column.Title
-		prefix, printValue, suffix := getPrintables(fmt.Sprintf("%v", title), column.Width, column.Align)
+		prefix, printValue, suffix := FormatAlignedTextParts(fmt.Sprintf("%v", title), column.Width, column.Align)
 
 		fmt.Printf("%s%s%s ", prefix, printValue, suffix)
 
@@ -65,31 +65,6 @@ func optimizeSpec(spec *Spec) {
 	}
 }
 
-func getPrintables(value string, width int, align Alignment) (string, string, string) {
-	shortvalue := value
-	if len(value) > width {
-		shortvalue = value[:width]
-	}
-	prefix := ""
-	suffix := ""
-	if len(shortvalue) < width {
-		padding := width - len(shortvalue)
-		switch align {
-		case AlignRight:
-			prefix = fmt.Sprintf("%*s", padding, "")
-		case AlignCenter:
-			leftPad := padding / 2
-			rightPad := padding - leftPad
-			prefix = fmt.Sprintf("%*s", leftPad, "")
-			suffix = fmt.Sprintf("%*s", rightPad, "")
-		default: // AlignLeft
-			suffix = fmt.Sprintf("%*s", padding, "")
-		}
-	}
-
-	return prefix, shortvalue, suffix
-}
-
 func printData(dataArray []interface{}, spec *Spec) {
 	for _, item := range dataArray {
 		for _, column := range spec.Columns {
@@ -102,7 +77,7 @@ func printData(dataArray []interface{}, spec *Spec) {
 				}
 			}
 			valueStr := fmt.Sprintf("%v", value)
-			prefix, printValue, suffix := getPrintables(valueStr, column.Width, column.Align)
+			prefix, printValue, suffix := FormatAlignedTextParts(valueStr, column.Width, column.Align)
 			urlPath := column.URLPath
 			if urlPath != "" {
 				urlValue, err := jsonpath.Get(urlPath, item)

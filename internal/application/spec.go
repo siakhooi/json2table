@@ -13,18 +13,6 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-// Alignment represents text alignment in a column
-type Alignment string
-
-const (
-	// AlignLeft aligns text to the left
-	AlignLeft Alignment = "left"
-	// AlignRight aligns text to the right
-	AlignRight Alignment = "right"
-	// AlignCenter aligns text to the center
-	AlignCenter Alignment = "center"
-)
-
 // StringOrStringArray is a custom type that can unmarshal from either a string or []string
 type StringOrStringArray []string
 
@@ -79,7 +67,7 @@ func (c *Column) setDefaults() {
 		c.MaxWidth = math.MaxInt
 	}
 	if c.Align == "" {
-		c.Align = AlignLeft
+		c.Align = DefaultAlignment
 	}
 	if len(c.Color.Color) == 0 {
 		c.Color = DefaultTextColor
