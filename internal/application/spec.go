@@ -54,7 +54,7 @@ type Column struct {
 	MaxWidth int                 `json:"maxWidth" validate:"min=0,gtefield=MinWidth"`
 	Align    Alignment           `json:"align" validate:"omitempty,oneof=left right center"`
 	URLPath  string              `json:"urlPath"`
-	Color    SupportedColorArray `json:"color"`
+	Color    TextColor           `json:"color"`
 
 	Width int
 }
@@ -81,7 +81,7 @@ func (c *Column) setDefaults() {
 	if c.Align == "" {
 		c.Align = AlignLeft
 	}
-	if c.Color == nil {
+	if len(c.Color.Color) == 0 {
 		c.Color = DefaultTextColor
 	}
 }

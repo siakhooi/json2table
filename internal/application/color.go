@@ -16,11 +16,19 @@ type SupportedColor string
 // SupportedColorArray represents an array of supported colors
 type SupportedColorArray []SupportedColor
 
-// DefaultTextColor is the default color (no color)
-var DefaultTextColor = []SupportedColor{ColorDefault}
+// TextColor represents text color specification
+type TextColor struct {
+	Type  string              `json:"type"`
+	Color SupportedColorArray `json:"color"`
+}
 
-// UnmarshalJSON implements json.Unmarshaler for SupportedColorArray
-func (s *SupportedColorArray) UnmarshalJSON(data []byte) error {
+// DefaultTextColor is the default color (no color)
+var DefaultTextColor = TextColor{
+	Type: "fixed", Color: []SupportedColor{ColorDefault},
+}
+
+// UnmarshalJSON implements json.Unmarshaler for TextColor
+func (s *TextColor) UnmarshalJSON(data []byte) error {
 	// Try to unmarshal as a string first
 	var str string
 	if err := json.Unmarshal(data, &str); err == nil {
@@ -28,7 +36,10 @@ func (s *SupportedColorArray) UnmarshalJSON(data []byte) error {
 		if !isSupportedColor(parsed) {
 			return fmt.Errorf("invalid color: %q", str)
 		}
-		*s = []SupportedColor{parsed}
+		*s = TextColor{
+			Type:  "fixed",
+			Color: []SupportedColor{parsed},
+		}
 		return nil
 	}
 
@@ -37,13 +48,16 @@ func (s *SupportedColorArray) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &arr); err != nil {
 		return err
 	}
-	*s = make([]SupportedColor, len(arr))
+	*s = TextColor{
+		Type:  "fixed",
+		Color: make([]SupportedColor, len(arr)),
+	}
 	for i, v := range arr {
 		parsed := SupportedColor(v)
 		if !isSupportedColor(parsed) {
 			return fmt.Errorf("invalid color at index %d: %q", i, v)
 		}
-		(*s)[i] = parsed
+		(*s).Color[i] = parsed
 	}
 	return nil
 }
@@ -195,7 +209,8 @@ var supportedColorMeta = map[SupportedColor]colorMeta{
 }
 
 // GetColored returns the printValue wrapped in color codes based on the color string
-func GetColored(printValue string, s []SupportedColor) any {
+func GetColored(printValue string, textColor TextColor) any {
+	s := textColor.Color
 	colors := make([]color.Attribute, 0, len(s))
 	for _, c := range s {
 		meta, ok := supportedColorMeta[c]
