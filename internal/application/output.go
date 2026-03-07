@@ -76,8 +76,8 @@ func printData(dataArray []interface{}, spec *Spec) {
 					break
 				}
 			}
-			valueStr := fmt.Sprintf("%v", value)
-			prefix, printValue, suffix := FormatAlignedTextParts(valueStr, column.Width, column.Align)
+			fullValue := fmt.Sprintf("%v", value)
+			prefix, printValue, suffix := FormatAlignedTextParts(fullValue, column.Width, column.Align)
 			urlPath := column.URLPath
 			if urlPath != "" {
 				urlValue, err := jsonpath.Get(urlPath, item)
@@ -86,7 +86,7 @@ func printData(dataArray []interface{}, spec *Spec) {
 					printValue = GetLink(printValue, urlStr)
 				}
 			}
-			coloredPrintValue := GetColored(printValue, column.Color)
+			coloredPrintValue := GetColored(fullValue, printValue, column.Color)
 			fmt.Printf("%s%s%s ", prefix, coloredPrintValue, suffix)
 		}
 		fmt.Println("")

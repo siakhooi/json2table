@@ -4,13 +4,21 @@ Package application run the application
 package application
 
 import (
+	"encoding/json"
+	"fmt"
+	"slices"
+
 	"github.com/fatih/color"
 )
 
 // TextColorSpec represents text color specification
 type TextColorSpec struct {
-	Type    colorType
-	Default StringList `json:"color"`
+	Type       colorType
+	Default    StringList `json:"default"`
+	Conditions []struct {
+		When  StringList `json:"when"`
+		Color StringList `json:"color"`
+	} `json:"conditions"`
 }
 
 // DefaultTextColor is the default color (no color)
@@ -22,6 +30,7 @@ type colorType int
 
 const (
 	colorTypeFixed colorType = iota
+	colorTypeConditional
 )
 
 // UnmarshalJSON implements json.Unmarshaler for TextColorSpec
@@ -38,14 +47,33 @@ func (s *TextColorSpec) UnmarshalJSON(data []byte) error {
 
 	// Try to unmarshal as a string array
 	arr, err := UnmarshalAsStringArray(data)
-	if err != nil {
-		return err
+	if err == nil {
+		*s = TextColorSpec{
+			Type:    colorTypeFixed,
+			Default: arr,
+		}
+		return nil
 	}
-	*s = TextColorSpec{
-		Type:    colorTypeFixed,
-		Default: arr,
+
+	// Try to unmarshal as an object
+	var obj struct {
+		Default    StringList `json:"default"`
+		Conditions []struct {
+			When  StringList `json:"when"`
+			Color StringList `json:"color"`
+		} `json:"conditions"`
 	}
-	return nil
+	err = json.Unmarshal(data, &obj)
+	if err == nil {
+		*s = TextColorSpec{
+			Type:       colorTypeConditional,
+			Default:    obj.Default,
+			Conditions: obj.Conditions,
+		}
+		return nil
+	}
+
+	return fmt.Errorf("invalid color specification: %s", string(data))
 }
 
 const (
@@ -190,8 +218,16 @@ var supportedColorMeta = map[string]colorMeta{
 }
 
 // GetColored returns the printValue wrapped in color codes based on the color string
-func GetColored(printValue string, textColor TextColorSpec) any {
+func GetColored(originalValue, printValue string, textColor TextColorSpec) any {
 	s := textColor.Default
+	if textColor.Type == colorTypeConditional {
+		for _, condition := range textColor.Conditions {
+			if slices.Contains(condition.When, originalValue) {
+				s = condition.Color
+			}
+		}
+	}
+
 	colors := make([]color.Attribute, 0, len(s))
 	for _, c := range s {
 		meta, ok := supportedColorMeta[c]

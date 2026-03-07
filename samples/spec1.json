@@ -21,7 +21,20 @@
       "path": "display.name",
       "maxWidth": 8,
       "align": "left",
-      "color": "bgRed"
+      "color": {
+        "default": "bgRed",
+        "conditions": [
+          {
+            "when": "ninnyhammer",
+            "color": "cyan"
+
+          },
+          {
+            "when": ["Alice", "baz"],
+            "color": ["green", "bold"]
+          }
+        ]
+      }
     },
     {
       "path": "desc",
