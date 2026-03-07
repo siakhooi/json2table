@@ -11,14 +11,14 @@ import (
 
 type supportedColor string
 
-// TextColor represents text color specification
-type TextColor struct {
+// TextColorSpec represents text color specification
+type TextColorSpec struct {
 	Type  colorType
 	Color []supportedColor `json:"color"`
 }
 
 // DefaultTextColor is the default color (no color)
-var DefaultTextColor = TextColor{
+var DefaultTextColor = TextColorSpec{
 	Type: colorTypeFixed, Color: []supportedColor{ColorDefault},
 }
 
@@ -28,8 +28,8 @@ const (
 	colorTypeFixed colorType = iota
 )
 
-// UnmarshalJSON implements json.Unmarshaler for TextColor
-func (s *TextColor) UnmarshalJSON(data []byte) error {
+// UnmarshalJSON implements json.Unmarshaler for TextColorSpec
+func (s *TextColorSpec) UnmarshalJSON(data []byte) error {
 	// Try to unmarshal as a string first
 	str, err := UnmarshalAsString(data)
 	if err == nil {
@@ -37,7 +37,7 @@ func (s *TextColor) UnmarshalJSON(data []byte) error {
 		if !isSupportedColor(parsed) {
 			return fmt.Errorf("invalid color: %q", str)
 		}
-		*s = TextColor{
+		*s = TextColorSpec{
 			Type:  colorTypeFixed,
 			Color: []supportedColor{parsed},
 		}
@@ -49,7 +49,7 @@ func (s *TextColor) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return err
 	}
-	*s = TextColor{
+	*s = TextColorSpec{
 		Type:  colorTypeFixed,
 		Color: make([]supportedColor, len(arr)),
 	}
@@ -210,7 +210,7 @@ var supportedColorMeta = map[supportedColor]colorMeta{
 }
 
 // GetColored returns the printValue wrapped in color codes based on the color string
-func GetColored(printValue string, textColor TextColor) any {
+func GetColored(printValue string, textColor TextColorSpec) any {
 	s := textColor.Color
 	colors := make([]color.Attribute, 0, len(s))
 	for _, c := range s {

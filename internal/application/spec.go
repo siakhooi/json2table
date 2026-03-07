@@ -42,7 +42,7 @@ type Column struct {
 	MaxWidth int                 `json:"maxWidth" validate:"min=0,gtefield=MinWidth"`
 	Align    Alignment           `json:"align" validate:"omitempty,oneof=left right center"`
 	URLPath  string              `json:"urlPath"`
-	Color    TextColor           `json:"color"`
+	Color    TextColorSpec       `json:"color"`
 
 	Width int
 }
