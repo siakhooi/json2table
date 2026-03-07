@@ -20,7 +20,7 @@ USAGE:
    json2table [global options] [dataFile]
 
 VERSION:
-   v0.2.0
+   v0.5.0
 
 GLOBAL OPTIONS:
    --build                   print build info and exit
