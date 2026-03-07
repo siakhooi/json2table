@@ -3,10 +3,52 @@ Package application run the application
 */
 package application
 
-import "github.com/fatih/color"
+import (
+	"encoding/json"
+	"fmt"
+
+	"github.com/fatih/color"
+)
 
 // SupportedColor represents text color in a column
 type SupportedColor string
+
+// SupportedColorArray represents an array of supported colors
+type SupportedColorArray []SupportedColor
+
+// UnmarshalJSON implements json.Unmarshaler for SupportedColorArray
+func (s *SupportedColorArray) UnmarshalJSON(data []byte) error {
+	// Try to unmarshal as a string first
+	var str string
+	if err := json.Unmarshal(data, &str); err == nil {
+		parsed := SupportedColor(str)
+		if !isSupportedColor(parsed) {
+			return fmt.Errorf("invalid color: %q", str)
+		}
+		*s = []SupportedColor{parsed}
+		return nil
+	}
+
+	// Try to unmarshal as a string array
+	var arr []string
+	if err := json.Unmarshal(data, &arr); err != nil {
+		return err
+	}
+	*s = make([]SupportedColor, len(arr))
+	for i, v := range arr {
+		parsed := SupportedColor(v)
+		if !isSupportedColor(parsed) {
+			return fmt.Errorf("invalid color at index %d: %q", i, v)
+		}
+		(*s)[i] = parsed
+	}
+	return nil
+}
+
+func isSupportedColor(c SupportedColor) bool {
+	_, ok := supportedColorMeta[c]
+	return ok
+}
 
 const (
 	// ColorDefault represents default color (no color)
@@ -150,6 +192,17 @@ var supportedColorMeta = map[SupportedColor]colorMeta{
 }
 
 // GetColored returns the printValue wrapped in color codes based on the color string
-func GetColored(printValue string, s SupportedColor) any {
-	return color.New(supportedColorMeta[s].color).SprintFunc()(printValue)
+func GetColored(printValue string, s []SupportedColor) any {
+	colors := make([]color.Attribute, 0, len(s))
+	for _, c := range s {
+		meta, ok := supportedColorMeta[c]
+		if !ok {
+			continue
+		}
+		colors = append(colors, meta.color)
+	}
+	if len(colors) == 0 {
+		return printValue
+	}
+	return color.New(colors...).SprintFunc()(printValue)
 }
