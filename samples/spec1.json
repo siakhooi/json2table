@@ -22,7 +22,8 @@
         {
             "path": "desc",
             "maxWidth": 20,
-            "align": "right"
+            "align": "right",
+            "color": "yellow"
         }
     ]
 }

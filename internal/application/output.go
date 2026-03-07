@@ -121,22 +121,11 @@ func printData(dataArray []interface{}, spec *Spec) {
 }
 
 // GetColored returns the printValue wrapped in color codes based on the color string
-func GetColored(printValue string, s Color) any {
+func GetColored(printValue string, s SupportedColor) any {
 	if s == Default {
 		return printValue
 	}
-	switch s {
-	case Red:
-		red := color.New(color.FgRed).SprintFunc()
-		return red(printValue)
-	case Blue:
-		blue := color.New(color.FgBlue).SprintFunc()
-		return blue(printValue)
-	case Green:
-		green := color.New(color.FgGreen).SprintFunc()
-		return green(printValue)
-	}
-	return printValue
+	return color.New(SupportedColorMeta[s].color).SprintFunc()(printValue)
 }
 
 // PrintTable prints JSON data in tabular format based on the provided specification

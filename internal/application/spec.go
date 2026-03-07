@@ -10,6 +10,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/fatih/color"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -25,19 +26,30 @@ const (
 	AlignCenter Alignment = "center"
 )
 
-// Color represents text color in a column
-type Color string
+// SupportedColor represents text color in a column
+type SupportedColor string
 
 const (
 	// Red represents red color
-	Red Color = "red"
+	Red SupportedColor = "red"
 	// Green represents green color
-	Green Color = "green"
+	Green SupportedColor = "green"
 	// Blue represents blue color
-	Blue Color = "blue"
+	Blue SupportedColor = "blue"
 	// Default represents default color (no color)
-	Default Color = "default"
+	Default SupportedColor = "default"
 )
+
+type colorMeta struct {
+	color color.Attribute
+}
+
+// SupportedColorMeta is a list of supported colors
+var SupportedColorMeta = map[SupportedColor]colorMeta{
+	Red:   {color: color.FgRed},
+	Green: {color: color.FgGreen},
+	Blue:  {color: color.FgBlue},
+}
 
 // StringOrStringArray is a custom type that can unmarshal from either a string or []string
 type StringOrStringArray []string
@@ -68,7 +80,7 @@ type Column struct {
 	MaxWidth int                 `json:"maxWidth" validate:"min=0,gtefield=MinWidth"`
 	Align    Alignment           `json:"align" validate:"omitempty,oneof=left right center"`
 	URLPath  string              `json:"urlPath"`
-	Color    Color               `json:"color"`
+	Color    SupportedColor      `json:"color"`
 
 	Width int
 }
