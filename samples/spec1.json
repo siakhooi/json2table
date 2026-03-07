@@ -6,15 +6,18 @@
             "title": "ID",
             "minWidth": 8,
             "align": "center",
-            "urlPath": "url"
+            "urlPath": "url",
+            "color": "red"
         },
         {
-            "path": "url"
+            "path": "url",
+            "color": "green"
         },
         {
             "path": "display.name",
             "maxWidth": 8,
-            "align": "left"
+            "align": "left",
+            "color": "blue"
         },
         {
             "path": "desc",

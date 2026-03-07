@@ -40,6 +40,7 @@ GLOBAL OPTIONS:
 
 ## Reference
 - https://github.com/savioxavier/termlink
+- https://github.com/fatih/color
 
 ## Badges
 

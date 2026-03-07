@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/PaesslerAG/jsonpath"
+	"github.com/fatih/color"
 )
 
 func selectDataArray(dataPath string, fullData interface{}) ([]interface{}, error) {
@@ -111,11 +112,31 @@ func printData(dataArray []interface{}, spec *Spec) {
 					printValue = GetLink(printValue, urlStr)
 				}
 			}
-			fmt.Printf("%s%s%s ", prefix, printValue, suffix)
+			coloredPrintValue := GetColored(printValue, column.Color)
+			fmt.Printf("%s%s%s ", prefix, coloredPrintValue, suffix)
 		}
 		fmt.Println("")
 	}
 
+}
+
+// GetColored returns the printValue wrapped in color codes based on the color string
+func GetColored(printValue, s string) any {
+	if s == "" {
+		return printValue
+	}
+	switch s {
+	case "red":
+		red := color.New(color.FgRed).SprintFunc()
+		return red(printValue)
+	case "blue":
+		blue := color.New(color.FgBlue).SprintFunc()
+		return blue(printValue)
+	case "green":
+		green := color.New(color.FgGreen).SprintFunc()
+		return green(printValue)
+	}
+	return printValue
 }
 
 // PrintTable prints JSON data in tabular format based on the provided specification

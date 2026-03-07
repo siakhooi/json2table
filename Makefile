@@ -1,5 +1,7 @@
 clean:
 	rm -rf bin
+go-mod-tidy:
+	go mod tidy
 build:
 	scripts/build.sh
 	goreleaser build --snapshot --clean
@@ -10,8 +12,8 @@ test:
 golangci-lint:
 	golangci-lint run
 
-all: clean test golangci-lint build
-quick: clean test golangci-lint build-linux
+all: clean go-mod-tidy test golangci-lint build
+quick: clean go-mod-tidy test golangci-lint build-linux
 commit:
 	scripts/git-commit-and-push.sh
 
