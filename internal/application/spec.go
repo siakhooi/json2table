@@ -25,6 +25,20 @@ const (
 	AlignCenter Alignment = "center"
 )
 
+// Color represents text color in a column
+type Color string
+
+const (
+	// Red represents red color
+	Red Color = "red"
+	// Green represents green color
+	Green Color = "green"
+	// Blue represents blue color
+	Blue Color = "blue"
+	// Default represents default color (no color)
+	Default Color = "default"
+)
+
 // StringOrStringArray is a custom type that can unmarshal from either a string or []string
 type StringOrStringArray []string
 
@@ -54,7 +68,7 @@ type Column struct {
 	MaxWidth int                 `json:"maxWidth" validate:"min=0,gtefield=MinWidth"`
 	Align    Alignment           `json:"align" validate:"omitempty,oneof=left right center"`
 	URLPath  string              `json:"urlPath"`
-	Color    string              `json:"color"`
+	Color    Color               `json:"color"`
 
 	Width int
 }
@@ -80,6 +94,9 @@ func (c *Column) setDefaults() {
 	}
 	if c.Align == "" {
 		c.Align = AlignLeft
+	}
+	if c.Color == "" {
+		c.Color = Default
 	}
 }
 func (s *Spec) setDefaults() {

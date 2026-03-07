@@ -121,18 +121,18 @@ func printData(dataArray []interface{}, spec *Spec) {
 }
 
 // GetColored returns the printValue wrapped in color codes based on the color string
-func GetColored(printValue, s string) any {
-	if s == "" {
+func GetColored(printValue string, s Color) any {
+	if s == Default {
 		return printValue
 	}
 	switch s {
-	case "red":
+	case Red:
 		red := color.New(color.FgRed).SprintFunc()
 		return red(printValue)
-	case "blue":
+	case Blue:
 		blue := color.New(color.FgBlue).SprintFunc()
 		return blue(printValue)
-	case "green":
+	case Green:
 		green := color.New(color.FgGreen).SprintFunc()
 		return green(printValue)
 	}
