@@ -106,6 +106,12 @@ func validateSpecFileValues(spec *Spec) error {
 		if col.Align != "" && !isValidAlignment(col.Align) {
 			return fmt.Errorf("column %d: invalid align value: %q", i, col.Align)
 		}
+
+		for _, c := range col.Color.Color {
+			if !isValidTextColor(c) {
+				return fmt.Errorf("column %d: invalid color value: %q", i, c)
+			}
+		}
 	}
 	return nil
 }

@@ -4,22 +4,18 @@ Package application run the application
 package application
 
 import (
-	"fmt"
-
 	"github.com/fatih/color"
 )
-
-type supportedColor string
 
 // TextColorSpec represents text color specification
 type TextColorSpec struct {
 	Type  colorType
-	Color []supportedColor `json:"color"`
+	Color StringList `json:"color"`
 }
 
 // DefaultTextColor is the default color (no color)
 var DefaultTextColor = TextColorSpec{
-	Type: colorTypeFixed, Color: []supportedColor{ColorDefault},
+	Type: colorTypeFixed, Color: StringList{ColorDefault},
 }
 
 type colorType int
@@ -33,13 +29,9 @@ func (s *TextColorSpec) UnmarshalJSON(data []byte) error {
 	// Try to unmarshal as a string first
 	str, err := UnmarshalAsString(data)
 	if err == nil {
-		parsed := supportedColor(str)
-		if !isSupportedColor(parsed) {
-			return fmt.Errorf("invalid color: %q", str)
-		}
 		*s = TextColorSpec{
 			Type:  colorTypeFixed,
-			Color: []supportedColor{parsed},
+			Color: StringList{str},
 		}
 		return nil
 	}
@@ -51,120 +43,108 @@ func (s *TextColorSpec) UnmarshalJSON(data []byte) error {
 	}
 	*s = TextColorSpec{
 		Type:  colorTypeFixed,
-		Color: make([]supportedColor, len(arr)),
-	}
-	for i, v := range arr {
-		parsed := supportedColor(v)
-		if !isSupportedColor(parsed) {
-			return fmt.Errorf("invalid color at index %d: %q", i, v)
-		}
-		(*s).Color[i] = parsed
+		Color: arr,
 	}
 	return nil
 }
 
-func isSupportedColor(c supportedColor) bool {
-	_, ok := supportedColorMeta[c]
-	return ok
-}
-
 const (
 	// ColorDefault represents default color (no color)
-	ColorDefault supportedColor = "default"
+	ColorDefault string = "default"
 
 	// ColorRed represents red color
-	ColorRed supportedColor = "red"
+	ColorRed string = "red"
 	// ColorGreen represents green color
-	ColorGreen supportedColor = "green"
+	ColorGreen string = "green"
 	// ColorBlue represents blue color
-	ColorBlue supportedColor = "blue"
+	ColorBlue string = "blue"
 	// ColorYellow represents yellow color
-	ColorYellow supportedColor = "yellow"
+	ColorYellow string = "yellow"
 	// ColorMagenta represents magenta color
-	ColorMagenta supportedColor = "magenta"
+	ColorMagenta string = "magenta"
 	// ColorCyan represents cyan color
-	ColorCyan supportedColor = "cyan"
+	ColorCyan string = "cyan"
 	// ColorWhite represents white color
-	ColorWhite supportedColor = "white"
+	ColorWhite string = "white"
 	// ColorBlack represents black color
-	ColorBlack supportedColor = "black"
+	ColorBlack string = "black"
 
 	// ColorHiRed represents high intensity red color
-	ColorHiRed supportedColor = "hiRed"
+	ColorHiRed string = "hiRed"
 	// ColorHiGreen represents high intensity green color
-	ColorHiGreen supportedColor = "hiGreen"
+	ColorHiGreen string = "hiGreen"
 	// ColorHiBlue represents high intensity blue color
-	ColorHiBlue supportedColor = "hiBlue"
+	ColorHiBlue string = "hiBlue"
 	// ColorHiYellow represents high intensity yellow color
-	ColorHiYellow supportedColor = "hiYellow"
+	ColorHiYellow string = "hiYellow"
 	// ColorHiMagenta represents high intensity magenta color
-	ColorHiMagenta supportedColor = "hiMagenta"
+	ColorHiMagenta string = "hiMagenta"
 	// ColorHiCyan represents high intensity cyan color
-	ColorHiCyan supportedColor = "hiCyan"
+	ColorHiCyan string = "hiCyan"
 	// ColorHiWhite represents high intensity white color
-	ColorHiWhite supportedColor = "hiWhite"
+	ColorHiWhite string = "hiWhite"
 	// ColorHiBlack represents high intensity black color
-	ColorHiBlack supportedColor = "hiBlack"
+	ColorHiBlack string = "hiBlack"
 
 	// ColorBgRed represents red background color
-	ColorBgRed supportedColor = "bgRed"
+	ColorBgRed string = "bgRed"
 	// ColorBgGreen represents green background color
-	ColorBgGreen supportedColor = "bgGreen"
+	ColorBgGreen string = "bgGreen"
 	// ColorBgBlue represents blue background color
-	ColorBgBlue supportedColor = "bgBlue"
+	ColorBgBlue string = "bgBlue"
 	// ColorBgYellow represents yellow background color
-	ColorBgYellow supportedColor = "bgYellow"
+	ColorBgYellow string = "bgYellow"
 	// ColorBgMagenta represents magenta background color
-	ColorBgMagenta supportedColor = "bgMagenta"
+	ColorBgMagenta string = "bgMagenta"
 	// ColorBgCyan represents cyan background color
-	ColorBgCyan supportedColor = "bgCyan"
+	ColorBgCyan string = "bgCyan"
 	// ColorBgWhite represents white background color
-	ColorBgWhite supportedColor = "bgWhite"
+	ColorBgWhite string = "bgWhite"
 	// ColorBgBlack represents black background color
-	ColorBgBlack supportedColor = "bgBlack"
+	ColorBgBlack string = "bgBlack"
 
 	// ColorHiBgRed represents high intensity red background color
-	ColorHiBgRed supportedColor = "hiBgRed"
+	ColorHiBgRed string = "hiBgRed"
 	// ColorHiBgGreen represents high intensity green background color
-	ColorHiBgGreen supportedColor = "hiBgGreen"
+	ColorHiBgGreen string = "hiBgGreen"
 	// ColorHiBgBlue represents high intensity blue background color
-	ColorHiBgBlue supportedColor = "hiBgBlue"
+	ColorHiBgBlue string = "hiBgBlue"
 	// ColorHiBgYellow represents high intensity yellow background color
-	ColorHiBgYellow supportedColor = "hiBgYellow"
+	ColorHiBgYellow string = "hiBgYellow"
 	// ColorHiBgMagenta represents high intensity magenta background color
-	ColorHiBgMagenta supportedColor = "hiBgMagenta"
+	ColorHiBgMagenta string = "hiBgMagenta"
 	// ColorHiBgCyan represents high intensity cyan background color
-	ColorHiBgCyan supportedColor = "hiBgCyan"
+	ColorHiBgCyan string = "hiBgCyan"
 	// ColorHiBgWhite represents high intensity white background color
-	ColorHiBgWhite supportedColor = "hiBgWhite"
+	ColorHiBgWhite string = "hiBgWhite"
 	// ColorHiBgBlack represents high intensity black background color
-	ColorHiBgBlack supportedColor = "hiBgBlack"
+	ColorHiBgBlack string = "hiBgBlack"
 
 	// ColorBold represents bold text
-	ColorBold supportedColor = "bold"
+	ColorBold string = "bold"
 	// ColorFaint represents faint text
-	ColorFaint supportedColor = "faint"
+	ColorFaint string = "faint"
 	// ColorItalic represents italic text
-	ColorItalic supportedColor = "italic"
+	ColorItalic string = "italic"
 	// ColorUnderline represents underlined text
-	ColorUnderline supportedColor = "underline"
+	ColorUnderline string = "underline"
 	// ColorBlinkSlow represents slow blinking text
-	ColorBlinkSlow supportedColor = "blinkSlow"
+	ColorBlinkSlow string = "blinkSlow"
 	// ColorBlinkRapid represents rapid blinking text
-	ColorBlinkRapid supportedColor = "blinkRapid"
+	ColorBlinkRapid string = "blinkRapid"
 	// ColorReverseVideo represents reverse video text
-	ColorReverseVideo supportedColor = "reverseVideo"
+	ColorReverseVideo string = "reverseVideo"
 	// ColorConcealed represents concealed text
-	ColorConcealed supportedColor = "concealed"
+	ColorConcealed string = "concealed"
 	// ColorCrossedOut represents crossed out text
-	ColorCrossedOut supportedColor = "crossedOut"
+	ColorCrossedOut string = "crossedOut"
 )
 
 type colorMeta struct {
 	color color.Attribute
 }
 
-var supportedColorMeta = map[supportedColor]colorMeta{
+var supportedColorMeta = map[string]colorMeta{
 	ColorDefault:      {color: color.Reset},
 	ColorRed:          {color: color.FgRed},
 	ColorGreen:        {color: color.FgGreen},
@@ -224,4 +204,9 @@ func GetColored(printValue string, textColor TextColorSpec) any {
 		return printValue
 	}
 	return color.New(colors...).SprintFunc()(printValue)
+}
+
+func isValidTextColor(colorName string) bool {
+	_, ok := supportedColorMeta[colorName]
+	return ok
 }
