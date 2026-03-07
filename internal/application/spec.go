@@ -13,36 +13,15 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-// StringOrStringArray is a custom type that can unmarshal from either a string or []string
-type StringOrStringArray []string
-
-// UnmarshalJSON implements json.Unmarshaler for StringOrStringArray
-func (s *StringOrStringArray) UnmarshalJSON(data []byte) error {
-	// Try to unmarshal as a string first
-	str, err := UnmarshalAsString(data)
-	if err == nil {
-		*s = []string{str}
-		return nil
-	}
-
-	// Try to unmarshal as a string array
-	arr, err := UnmarshalAsStringArray(data)
-	if err != nil {
-		return err
-	}
-	*s = arr
-	return nil
-}
-
 // Column represents a column specification
 type Column struct {
-	Path     StringOrStringArray `json:"path" validate:"required"`
-	Title    string              `json:"title"`
-	MinWidth int                 `json:"minWidth" validate:"min=0,ltefield=MaxWidth"`
-	MaxWidth int                 `json:"maxWidth" validate:"min=0,gtefield=MinWidth"`
-	Align    Alignment           `json:"align" validate:"omitempty,oneof=left right center"`
-	URLPath  string              `json:"urlPath"`
-	Color    TextColorSpec       `json:"color"`
+	Path     StringList    `json:"path" validate:"required"`
+	Title    string        `json:"title"`
+	MinWidth int           `json:"minWidth" validate:"min=0,ltefield=MaxWidth"`
+	MaxWidth int           `json:"maxWidth" validate:"min=0,gtefield=MinWidth"`
+	Align    Alignment     `json:"align" validate:"omitempty,oneof=left right center"`
+	URLPath  string        `json:"urlPath"`
+	Color    TextColorSpec `json:"color"`
 
 	Width int
 }
