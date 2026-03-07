@@ -98,3 +98,46 @@ func TestFormatAlignedTextParts(t *testing.T) {
 		})
 	}
 }
+
+func TestIsValidAlignment(t *testing.T) {
+	tests := []struct {
+		name  string
+		align Alignment
+		want  bool
+	}{
+		{
+			name:  "left alignment is valid",
+			align: AlignLeft,
+			want:  true,
+		},
+		{
+			name:  "right alignment is valid",
+			align: AlignRight,
+			want:  true,
+		},
+		{
+			name:  "center alignment is valid",
+			align: AlignCenter,
+			want:  true,
+		},
+		{
+			name:  "empty alignment is invalid",
+			align: "",
+			want:  false,
+		},
+		{
+			name:  "unknown alignment is invalid",
+			align: Alignment("justify"),
+			want:  false,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := isValidAlignment(tc.align)
+			if got != tc.want {
+				t.Fatalf("isValidAlignment(%q) = %v, want %v", tc.align, got, tc.want)
+			}
+		})
+	}
+}

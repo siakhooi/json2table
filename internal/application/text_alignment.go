@@ -45,3 +45,12 @@ func FormatAlignedTextParts(value string, width int, align Alignment) (string, s
 
 	return prefix, shortvalue, suffix
 }
+
+func isValidAlignment(align Alignment) bool {
+	validAlignments := map[Alignment]bool{
+		AlignLeft:   true,
+		AlignRight:  true,
+		AlignCenter: true,
+	}
+	return validAlignments[align]
+}

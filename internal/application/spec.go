@@ -101,6 +101,15 @@ func ReadSpec(specFile string) ([]byte, error) {
 	return data, nil
 }
 
+func validateSpecFileValues(spec *Spec) error {
+	for i, col := range spec.Columns {
+		if col.Align != "" && !isValidAlignment(col.Align) {
+			return fmt.Errorf("column %d: invalid align value: %q", i, col.Align)
+		}
+	}
+	return nil
+}
+
 // ReadParseValidateSpec reads a spec file, parses it, and validates it
 func ReadParseValidateSpec(specFile, envSpec string) (*Spec, error) {
 	data := []byte(envSpec)
@@ -113,6 +122,10 @@ func ReadParseValidateSpec(specFile, envSpec string) (*Spec, error) {
 	}
 	spec, err := ParseAndValidateSpec(data)
 	if err != nil {
+		return nil, err
+	}
+
+	if err := validateSpecFileValues(spec); err != nil {
 		return nil, err
 	}
 
