@@ -11,19 +11,19 @@
         },
         {
             "path": "url",
-            "color": "green"
+            "color": "hiRed"
         },
         {
             "path": "display.name",
             "maxWidth": 8,
             "align": "left",
-            "color": "blue"
+            "color": "bgRed"
         },
         {
             "path": "desc",
             "maxWidth": 20,
             "align": "right",
-            "color": "yellow"
+            "color": "hiBgRed"
         }
     ]
 }
