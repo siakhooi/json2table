@@ -8,7 +8,7 @@ import (
 
 func TestGetLink_EmptyURLReturnsText(t *testing.T) {
 	text := "hello"
-	got := GetLink(text, "")
+	got := applyLink(text, "")
 	if got != text {
 		t.Fatalf("GetLink(%q, %q) = %q, want %q", text, "", got, text)
 	}
@@ -19,7 +19,7 @@ func TestGetLink_WithURLReturnsTerminalLink(t *testing.T) {
 	url := "https://example.com"
 	want := termlink.Link(text, url)
 
-	got := GetLink(text, url)
+	got := applyLink(text, url)
 	if got != want {
 		t.Fatalf("GetLink(%q, %q) = %q, want %q", text, url, got, want)
 	}

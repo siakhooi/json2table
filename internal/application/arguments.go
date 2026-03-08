@@ -22,10 +22,10 @@ type Arguments struct {
 func ParseArguments(c *cli.Command) (Arguments, error) {
 	envSpec := os.Getenv("JSON2TABLE_SPEC")
 
-	specFile := ValidateSpecFile(c.String("spec"))
+	specFile := validateSpecFile(c.String("spec"))
 
 	argumentsList := c.Args().Slice()
-	dataFile, err := ValidateDataFile(argumentsList)
+	dataFile, err := validateDataFile(argumentsList)
 	if err != nil {
 		return Arguments{}, err
 	}
@@ -53,8 +53,7 @@ func ParseArguments(c *cli.Command) (Arguments, error) {
 	return args, nil
 }
 
-// ValidateSpecFile validates the spec file option
-func ValidateSpecFile(specFile string) string {
+func validateSpecFile(specFile string) string {
 	// If specFile is provided via CLI flag, use it
 	if specFile != "" {
 		return specFile
@@ -70,8 +69,7 @@ func ValidateSpecFile(specFile string) string {
 	return ""
 }
 
-// ValidateDataFile validates the data file argument, ensuring that either a single file is provided or data is piped to stdin
-func ValidateDataFile(args []string) (string, error) {
+func validateDataFile(args []string) (string, error) {
 	if len(args) == 0 {
 		// check if stdin is piped
 		fi, err := os.Stdin.Stat()

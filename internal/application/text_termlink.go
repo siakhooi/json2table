@@ -7,8 +7,7 @@ import (
 	"github.com/savioxavier/termlink"
 )
 
-// GetLink returns a terminal link if the url is not empty, otherwise it returns the text as is
-func GetLink(text, url string) string {
+func applyLink(text, url string) string {
 	if url == "" {
 		return text
 	}

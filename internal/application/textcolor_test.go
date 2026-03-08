@@ -21,7 +21,7 @@ func TestGetColoredFixedValidColor(t *testing.T) {
 	printValue := "hello"
 	spec := TextColorSpec{Type: colorTypeFixed, Default: StringList{ColorRed}}
 
-	got := GetColored("ignored", printValue, spec)
+	got := applyColor("ignored", printValue, spec)
 	expected := color.New(color.FgRed).SprintFunc()(printValue)
 	if got != expected {
 		t.Fatalf("GetColored() = %q, want %q", got, expected)
@@ -32,7 +32,7 @@ func TestGetColoredUnsupportedColorReturnsPlainValue(t *testing.T) {
 	printValue := "hello"
 	spec := TextColorSpec{Type: colorTypeFixed, Default: StringList{"unknown-color"}}
 
-	got := GetColored("ignored", printValue, spec)
+	got := applyColor("ignored", printValue, spec)
 	if got != printValue {
 		t.Fatalf("GetColored() = %q, want %q", got, printValue)
 	}
@@ -53,7 +53,7 @@ func TestGetColoredConditionalMatchUsesConditionColor(t *testing.T) {
 		},
 	}
 
-	got := GetColored("match", printValue, spec)
+	got := applyColor("match", printValue, spec)
 	expected := color.New(color.FgRed).SprintFunc()(printValue)
 	if got != expected {
 		t.Fatalf("GetColored() = %q, want %q", got, expected)
@@ -75,7 +75,7 @@ func TestGetColoredConditionalNoMatchUsesDefaultColor(t *testing.T) {
 		},
 	}
 
-	got := GetColored("no-match", printValue, spec)
+	got := applyColor("no-match", printValue, spec)
 	expected := color.New(color.FgGreen).SprintFunc()(printValue)
 	if got != expected {
 		t.Fatalf("GetColored() = %q, want %q", got, expected)
@@ -98,7 +98,7 @@ func TestGetColoredConditionalLastMatchWins(t *testing.T) {
 		},
 	}
 
-	got := GetColored("match", printValue, spec)
+	got := applyColor("match", printValue, spec)
 	expected := color.New(color.FgBlue).SprintFunc()(printValue)
 	if got != expected {
 		t.Fatalf("GetColored() = %q, want %q", got, expected)

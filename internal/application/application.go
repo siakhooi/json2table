@@ -37,12 +37,12 @@ func action(_ context.Context, c *cli.Command) error {
 		return err
 	}
 
-	spec, err := ReadParseValidateSpec(args.SpecFile, args.EnvSpec)
+	spec, err := readParseValidateSpec(args.SpecFile, args.EnvSpec)
 	if err != nil {
 		return err
 	}
 
-	jsonData, err := ReadParseData(args.DataFile)
+	jsonData, err := readParseData(args.DataFile)
 	if err != nil {
 		return err
 	}

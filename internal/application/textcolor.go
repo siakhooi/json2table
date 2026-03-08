@@ -9,8 +9,7 @@ import (
 	"github.com/fatih/color"
 )
 
-// GetColored returns the printValue wrapped in color codes based on the color string
-func GetColored(originalValue, printValue string, textColor TextColorSpec) any {
+func applyColor(originalValue, printValue string, textColor TextColorSpec) any {
 	s := textColor.Default
 	if textColor.Type == colorTypeConditional {
 		for _, condition := range textColor.Conditions {

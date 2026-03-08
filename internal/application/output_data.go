@@ -31,7 +31,7 @@ func applyURLPath(printValue string, urlPath string, item interface{}) string {
 	}
 
 	urlStr := fmt.Sprintf("%v", urlValue)
-	return GetLink(printValue, urlStr)
+	return applyLink(printValue, urlStr)
 }
 
 func printData(dataArray []interface{}, spec *Spec) {
@@ -39,9 +39,9 @@ func printData(dataArray []interface{}, spec *Spec) {
 		for _, column := range spec.Columns {
 			value := selectFirstValue(column.Path, item)
 			fullValue := fmt.Sprintf("%v", value)
-			prefix, printValue, suffix := FormatAlignedTextParts(fullValue, column.Width, column.Align)
+			prefix, printValue, suffix := formatAlignedTextParts(fullValue, column.Width, column.Align)
 			printValue = applyURLPath(printValue, column.URLPath, item)
-			coloredPrintValue := GetColored(fullValue, printValue, column.Color)
+			coloredPrintValue := applyColor(fullValue, printValue, column.Color)
 			fmt.Printf("%s%s%s ", prefix, coloredPrintValue, suffix)
 		}
 		fmt.Println("")

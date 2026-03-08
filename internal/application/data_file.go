@@ -43,8 +43,7 @@ func parseData(data []byte) (interface{}, error) {
 	return jsonData, nil
 }
 
-// ReadParseData reads a data file and parses it into an interface{}
-func ReadParseData(dataFilePath string) (interface{}, error) {
+func readParseData(dataFilePath string) (interface{}, error) {
 	data, err := readData(dataFilePath)
 	if err != nil {
 		return nil, err

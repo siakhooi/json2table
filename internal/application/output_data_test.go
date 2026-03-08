@@ -48,7 +48,7 @@ func TestApplyURLPathAppliesLinkWhenURLExists(t *testing.T) {
 	item := map[string]interface{}{"url": "https://example.com"}
 
 	got := applyURLPath(printValue, "$.url", item)
-	want := GetLink(printValue, "https://example.com")
+	want := applyLink(printValue, "https://example.com")
 	if got != want {
 		t.Fatalf("applyURLPath() = %q, want %q", got, want)
 	}

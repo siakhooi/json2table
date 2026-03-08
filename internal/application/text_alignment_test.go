@@ -79,7 +79,7 @@ func TestFormatAlignedTextParts(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			gotPrefix, gotValue, gotSuffix := FormatAlignedTextParts(tc.value, tc.width, tc.align)
+			gotPrefix, gotValue, gotSuffix := formatAlignedTextParts(tc.value, tc.width, tc.align)
 
 			if gotPrefix != tc.wantPrefix || gotValue != tc.wantValue || gotSuffix != tc.wantSuffix {
 				t.Fatalf(

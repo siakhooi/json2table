@@ -37,7 +37,7 @@ func TestValidateSpecFilePrefersCLIFlag(t *testing.T) {
 		_ = os.Unsetenv("JSON2TABLE_SPEC_FILE")
 	})
 
-	got := ValidateSpecFile("cli-spec.json")
+	got := validateSpecFile("cli-spec.json")
 	if got != "cli-spec.json" {
 		t.Fatalf("ValidateSpecFile returned %q, want %q", got, "cli-spec.json")
 	}
@@ -51,7 +51,7 @@ func TestValidateSpecFileUsesEnvWhenCLIEmpty(t *testing.T) {
 		_ = os.Unsetenv("JSON2TABLE_SPEC_FILE")
 	})
 
-	got := ValidateSpecFile("")
+	got := validateSpecFile("")
 	if got != "env-spec.json" {
 		t.Fatalf("ValidateSpecFile returned %q, want %q", got, "env-spec.json")
 	}
@@ -62,14 +62,14 @@ func TestValidateSpecFileReturnsEmptyWhenMissing(t *testing.T) {
 		t.Fatalf("failed to unset JSON2TABLE_SPEC_FILE: %v", err)
 	}
 
-	got := ValidateSpecFile("")
+	got := validateSpecFile("")
 	if got != "" {
 		t.Fatalf("ValidateSpecFile returned %q, want empty", got)
 	}
 }
 
 func TestValidateDataFileWithArgument(t *testing.T) {
-	got, err := ValidateDataFile([]string{"data.json"})
+	got, err := validateDataFile([]string{"data.json"})
 	if err != nil {
 		t.Fatalf("ValidateDataFile returned error: %v", err)
 	}
@@ -91,7 +91,7 @@ func TestValidateDataFileUsesStdinWhenPiped(t *testing.T) {
 		_ = writePipe.Close()
 	})
 
-	got, err := ValidateDataFile(nil)
+	got, err := validateDataFile(nil)
 	if err != nil {
 		t.Fatalf("ValidateDataFile returned error: %v", err)
 	}
@@ -112,7 +112,7 @@ func TestValidateDataFileNoArgAndNoPipeReturnsEmpty(t *testing.T) {
 		_ = devNull.Close()
 	})
 
-	got, err := ValidateDataFile(nil)
+	got, err := validateDataFile(nil)
 	if err != nil {
 		t.Fatalf("ValidateDataFile returned error: %v", err)
 	}
@@ -135,7 +135,7 @@ func TestValidateDataFileReturnsErrorWhenStdinStatFails(t *testing.T) {
 		os.Stdin = originalStdin
 	})
 
-	_, err = ValidateDataFile(nil)
+	_, err = validateDataFile(nil)
 	if err == nil {
 		t.Fatal("expected ValidateDataFile to return error")
 	}

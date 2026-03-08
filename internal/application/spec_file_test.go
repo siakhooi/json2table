@@ -145,7 +145,7 @@ func TestValidateSpecFileValuesValid(t *testing.T) {
 func TestReadParseValidateSpecUsesEnvSpecWhenProvided(t *testing.T) {
 	envSpec := `{"columns":[{"path":"$.name","color":"green"}]}`
 
-	spec, err := ReadParseValidateSpec("/path/does/not/exist/spec.json", envSpec)
+	spec, err := readParseValidateSpec("/path/does/not/exist/spec.json", envSpec)
 	if err != nil {
 		t.Fatalf("ReadParseValidateSpec returned error: %v", err)
 	}
@@ -165,7 +165,7 @@ func TestReadParseValidateSpecReadsFromFile(t *testing.T) {
 		t.Fatalf("failed to write spec file: %v", err)
 	}
 
-	spec, err := ReadParseValidateSpec(specFile, "")
+	spec, err := readParseValidateSpec(specFile, "")
 	if err != nil {
 		t.Fatalf("ReadParseValidateSpec returned error: %v", err)
 	}
@@ -178,7 +178,7 @@ func TestReadParseValidateSpecReadsFromFile(t *testing.T) {
 }
 
 func TestReadParseValidateSpecReadFileError(t *testing.T) {
-	_, err := ReadParseValidateSpec(filepath.Join(t.TempDir(), "missing.json"), "")
+	_, err := readParseValidateSpec(filepath.Join(t.TempDir(), "missing.json"), "")
 	if err == nil {
 		t.Fatal("expected ReadParseValidateSpec to return error")
 	}
@@ -190,7 +190,7 @@ func TestReadParseValidateSpecReadFileError(t *testing.T) {
 func TestReadParseValidateSpecInvalidColorValue(t *testing.T) {
 	envSpec := `{"columns":[{"path":"$.name","color":"unknown-color"}]}`
 
-	_, err := ReadParseValidateSpec("", envSpec)
+	_, err := readParseValidateSpec("", envSpec)
 	if err == nil {
 		t.Fatal("expected ReadParseValidateSpec to return error")
 	}

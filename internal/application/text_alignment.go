@@ -20,8 +20,7 @@ const (
 // DefaultAlignment is the default text alignment (left)
 var DefaultAlignment = AlignLeft
 
-// FormatAlignedTextParts formats the given value according to the specified width and alignment, returning the prefix, formatted value, and suffix for proper alignment in a table cell.
-func FormatAlignedTextParts(value string, width int, align Alignment) (string, string, string) {
+func formatAlignedTextParts(value string, width int, align Alignment) (string, string, string) {
 	shortvalue := value
 	if len(value) > width {
 		shortvalue = value[:width]

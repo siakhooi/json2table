@@ -63,8 +63,7 @@ func validateSpecFileValues(spec *Spec) error {
 	return nil
 }
 
-// ReadParseValidateSpec reads a spec file, parses it, and validates it
-func ReadParseValidateSpec(specFile, envSpec string) (*Spec, error) {
+func readParseValidateSpec(specFile, envSpec string) (*Spec, error) {
 	data := []byte(envSpec)
 	if envSpec == "" {
 		var err error

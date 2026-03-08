@@ -132,7 +132,7 @@ func TestReadParseDataValid(t *testing.T) {
 		t.Fatalf("failed to create data file: %v", err)
 	}
 
-	got, err := ReadParseData(dataFile)
+	got, err := readParseData(dataFile)
 	if err != nil {
 		t.Fatalf("ReadParseData returned error: %v", err)
 	}
@@ -153,7 +153,7 @@ func TestReadParseDataInvalidJSON(t *testing.T) {
 		t.Fatalf("failed to create bad data file: %v", err)
 	}
 
-	_, err := ReadParseData(dataFile)
+	_, err := readParseData(dataFile)
 	if err == nil {
 		t.Fatal("expected ReadParseData to return error for invalid JSON")
 	}
