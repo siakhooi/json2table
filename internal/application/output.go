@@ -20,17 +20,6 @@ func printHeader(columns []Column) {
 	fmt.Println("")
 }
 
-func optimizeSpec(spec *Spec) {
-	for i, column := range spec.Columns {
-		if column.MinWidth > 0 && column.Width < column.MinWidth {
-			spec.Columns[i].Width = column.MinWidth
-		}
-		if column.MaxWidth > 0 && column.Width > column.MaxWidth {
-			spec.Columns[i].Width = column.MaxWidth
-		}
-	}
-}
-
 func printData(dataArray []interface{}, spec *Spec) {
 	for _, item := range dataArray {
 		for _, column := range spec.Columns {
