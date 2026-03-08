@@ -28,6 +28,11 @@ GLOBAL OPTIONS:
    --help, -h                show help
    --version, -v             print the version
 ```
+
+## Spec Reference
+
+- [Spec file guide](./SPEC.md)
+
 ### Examples
 - Example: [Picsum list](./examples/picsum-list.md)
 
