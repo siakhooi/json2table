@@ -11,6 +11,25 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+func validateSpec(spec *Spec) error {
+	if spec == nil {
+		return fmt.Errorf("spec is nil")
+	}
+
+	validate := validator.New(validator.WithRequiredStructEnabled())
+
+	return validate.Struct(spec)
+}
+
+func readSpec(specFile string) ([]byte, error) {
+	// Read the spec file
+	data, err := os.ReadFile(specFile)
+	if err != nil {
+		return nil, fmt.Errorf("cannot read spec file: %w", err)
+	}
+	return data, nil
+}
+
 func parseAndValidateSpec(data []byte) (*Spec, error) {
 	var spec Spec
 
@@ -27,26 +46,6 @@ func parseAndValidateSpec(data []byte) (*Spec, error) {
 	}
 
 	return &spec, nil
-}
-
-func validateSpec(spec *Spec) error {
-	if spec == nil {
-		return fmt.Errorf("spec is nil")
-	}
-
-	validate := validator.New(validator.WithRequiredStructEnabled())
-
-	return validate.Struct(spec)
-}
-
-// ReadSpec reads a spec file
-func ReadSpec(specFile string) ([]byte, error) {
-	// Read the spec file
-	data, err := os.ReadFile(specFile)
-	if err != nil {
-		return nil, fmt.Errorf("cannot read spec file: %w", err)
-	}
-	return data, nil
 }
 
 func validateSpecFileValues(spec *Spec) error {
@@ -69,7 +68,7 @@ func ReadParseValidateSpec(specFile, envSpec string) (*Spec, error) {
 	data := []byte(envSpec)
 	if envSpec == "" {
 		var err error
-		data, err = ReadSpec(specFile)
+		data, err = readSpec(specFile)
 		if err != nil {
 			return nil, err
 		}
