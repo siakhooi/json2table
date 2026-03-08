@@ -3,7 +3,11 @@ Package application run the application
 */
 package application
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/mattn/go-runewidth"
+)
 
 // Alignment represents text alignment in a column
 type Alignment string
@@ -21,14 +25,19 @@ const (
 var DefaultAlignment = AlignLeft
 
 func formatAlignedTextParts(value string, width int, align Alignment) (string, string, string) {
+	if width <= 0 {
+		return "", "", ""
+	}
+
 	shortvalue := value
-	if len(value) > width {
-		shortvalue = value[:width]
+	if runewidth.StringWidth(value) > width {
+		shortvalue = runewidth.Truncate(value, width, "")
 	}
 	prefix := ""
 	suffix := ""
-	if len(shortvalue) < width {
-		padding := width - len(shortvalue)
+	visibleWidth := runewidth.StringWidth(shortvalue)
+	if visibleWidth < width {
+		padding := width - visibleWidth
 		switch align {
 		case AlignRight:
 			prefix = fmt.Sprintf("%*s", padding, "")

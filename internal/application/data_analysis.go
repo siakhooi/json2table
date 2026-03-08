@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/PaesslerAG/jsonpath"
+	"github.com/mattn/go-runewidth"
 )
 
 func analyseData(spec *Spec, dataArray []interface{}) {
@@ -27,8 +28,9 @@ func updateColumnWidth(spec *Spec, columnIndex int, column Column, item interfac
 			continue
 		}
 		valueStr := fmt.Sprintf("%v", value)
-		if len(valueStr) > column.Width {
-			spec.Columns[columnIndex].Width = len(valueStr)
+		valueWidth := runewidth.StringWidth(valueStr)
+		if valueWidth > column.Width {
+			spec.Columns[columnIndex].Width = valueWidth
 		}
 		break
 	}

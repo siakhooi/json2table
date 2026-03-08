@@ -95,3 +95,24 @@ func TestAnalyseDataUpdatesAllColumnsToMaxWidth(t *testing.T) {
 		t.Fatalf("title width = %d, want %d", got, want)
 	}
 }
+
+func TestUpdateColumnWidthUsesDisplayWidthForAccents(t *testing.T) {
+	spec := &Spec{
+		Columns: []Column{
+			{
+				Path:  StringList{"name"},
+				Width: 0,
+			},
+		},
+	}
+
+	item := map[string]interface{}{
+		"name": "Padmé",
+	}
+
+	updateColumnWidth(spec, 0, spec.Columns[0], item)
+
+	if got, want := spec.Columns[0].Width, 5; got != want {
+		t.Fatalf("width = %d, want %d", got, want)
+	}
+}
