@@ -9,27 +9,38 @@ import (
 	"github.com/PaesslerAG/jsonpath"
 )
 
+func selectFirstValue(paths StringList, item interface{}) interface{} {
+	for _, path := range paths {
+		value, err := jsonpath.Get(path, item)
+		if err == nil && value != nil {
+			return value
+		}
+	}
+
+	return nil
+}
+
+func applyURLPath(printValue string, urlPath string, item interface{}) string {
+	if urlPath == "" {
+		return printValue
+	}
+
+	urlValue, err := jsonpath.Get(urlPath, item)
+	if err != nil || urlValue == nil {
+		return printValue
+	}
+
+	urlStr := fmt.Sprintf("%v", urlValue)
+	return GetLink(printValue, urlStr)
+}
+
 func printData(dataArray []interface{}, spec *Spec) {
 	for _, item := range dataArray {
 		for _, column := range spec.Columns {
-			var value interface{}
-			for _, path := range column.Path {
-				v, err := jsonpath.Get(path, item)
-				if err == nil && v != nil {
-					value = v
-					break
-				}
-			}
+			value := selectFirstValue(column.Path, item)
 			fullValue := fmt.Sprintf("%v", value)
 			prefix, printValue, suffix := FormatAlignedTextParts(fullValue, column.Width, column.Align)
-			urlPath := column.URLPath
-			if urlPath != "" {
-				urlValue, err := jsonpath.Get(urlPath, item)
-				if err == nil && urlValue != nil {
-					urlStr := fmt.Sprintf("%v", urlValue)
-					printValue = GetLink(printValue, urlStr)
-				}
-			}
+			printValue = applyURLPath(printValue, column.URLPath, item)
 			coloredPrintValue := GetColored(fullValue, printValue, column.Color)
 			fmt.Printf("%s%s%s ", prefix, coloredPrintValue, suffix)
 		}
