@@ -32,22 +32,13 @@ const (
 
 // UnmarshalJSON implements json.Unmarshaler for TextColorSpec
 func (s *TextColorSpec) UnmarshalJSON(data []byte) error {
-	// Try to unmarshal as a string first
-	str, err := UnmarshalAsString(data)
+	// Try to unmarshal as a string or string array
+	var fixed StringList
+	err := json.Unmarshal(data, &fixed)
 	if err == nil {
 		*s = TextColorSpec{
 			Type:    colorTypeFixed,
-			Default: StringList{str},
-		}
-		return nil
-	}
-
-	// Try to unmarshal as a string array
-	arr, err := UnmarshalAsStringArray(data)
-	if err == nil {
-		*s = TextColorSpec{
-			Type:    colorTypeFixed,
-			Default: arr,
+			Default: fixed,
 		}
 		return nil
 	}
