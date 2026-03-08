@@ -5,6 +5,8 @@ go-mod-tidy:
 build:
 	scripts/build.sh
 	goreleaser build --snapshot --clean
+go-release:
+	goreleaser release --snapshot --clean
 build-linux:
 	scripts/build.sh -l
 test:
@@ -12,7 +14,9 @@ test:
 golangci-lint:
 	golangci-lint run
 
-all: clean go-mod-tidy test golangci-lint build
+deb-list:
+	 dpkg-deb --contents dist/siakhooi-json2table*_amd64.deb
+all: clean go-mod-tidy test golangci-lint go-release
 quick: clean go-mod-tidy test golangci-lint build-linux
 commit:
 	scripts/git-commit-and-push.sh

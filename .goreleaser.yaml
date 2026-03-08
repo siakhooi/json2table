@@ -38,6 +38,19 @@ archives:
       - goos: windows
         formats: [zip]
 
+nfpms:
+  - package_name: siakhooi-json2table
+    file_name_template: "{{ .ConventionalFileName }}"
+    vendor: siakhooi
+    homepage: https://github.com/siakhooi/json2table
+    maintainer: siakhooi
+    description: convert json data to tabular format
+    license: MIT
+    bindir: /usr/bin
+    formats:
+      - deb
+      - rpm
+
 changelog:
   sort: asc
   filters:
