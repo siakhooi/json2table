@@ -11,9 +11,8 @@ type StringList []string
 // UnmarshalJSON implements json.Unmarshaler for StringList
 func (s *StringList) UnmarshalJSON(data []byte) error {
 	// Try to unmarshal as a string first
-	var str string
-	if err := json.Unmarshal(data, &str); err == nil {
-		*s = []string{str}
+	if str := new(string); json.Unmarshal(data, str) == nil {
+		*s = []string{*str}
 		return nil
 	}
 
