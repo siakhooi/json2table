@@ -28,9 +28,8 @@ GLOBAL OPTIONS:
    --help, -h                show help
    --version, -v             print the version
 ```
-### Sample
-- Spec: [Spec](./samples/spec1.json)
-- Script: [picsum-list.sh](./samples/picsum-list.sh)
+### Examples
+- Example: [Picsum list](./examples/picsum-list.md)
 
 ## Quality
 
