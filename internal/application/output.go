@@ -33,27 +33,6 @@ func printHeader(columns []Column) {
 	fmt.Println("")
 }
 
-func analyseData(spec *Spec, dataArray []interface{}) {
-	for _, item := range dataArray {
-		for i, column := range spec.Columns {
-			for _, path := range column.Path {
-				value, err := jsonpath.Get(path, item)
-				if err != nil {
-					continue
-				}
-				if value == nil {
-					continue
-				}
-				valueStr := fmt.Sprintf("%v", value)
-				if len(valueStr) > column.Width {
-					spec.Columns[i].Width = len(valueStr)
-				}
-				break
-			}
-		}
-	}
-}
-
 func optimizeSpec(spec *Spec) {
 	for i, column := range spec.Columns {
 		if column.MinWidth > 0 && column.Width < column.MinWidth {
