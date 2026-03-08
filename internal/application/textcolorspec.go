@@ -62,6 +62,10 @@ func (s *TextColorSpec) UnmarshalJSON(data []byte) error {
 	}
 	err = json.Unmarshal(data, &obj)
 	if err == nil {
+		if obj.Default == nil {
+			obj.Default = StringList{ColorDefault}
+		}
+
 		*s = TextColorSpec{
 			Type:       colorTypeConditional,
 			Default:    obj.Default,
