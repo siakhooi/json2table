@@ -4,12 +4,34 @@ convert json data to tabular format
 
 ## Installation
 
+### Download Binaries
 To install `json2table`, visit the [Release page](https://github.com/siakhooi/json2table/releases) and download the appropriate binary for your operating system and architecture.
 
 1. Go to the [Release page](https://github.com/siakhooi/json2table/releases).
 2. Find the latest release and download the binary matching your OS and CPU architecture.
 3. Extract the downloaded file and move the binary to a directory in your `$PATH` (e.g., `/usr/local/bin`).
 4. Verify installation by running `json2table --version`.
+
+### Ubuntu/Debian
+
+```bash
+$ sudo curl -L https://siakhooi.github.io/apt/siakhooi-apt.list | sudo tee /etc/apt/sources.list.d/siakhooi-apt.list > /dev/null
+$ sudo curl -L https://siakhooi.github.io/apt/siakhooi-apt.gpg  | sudo tee /usr/share/keyrings/siakhooi-apt.gpg > /dev/null
+$ sudo apt update
+
+$ sudo apt install siakhooi-jexl-executor
+```
+
+### Fedora/Red Hat
+
+```bash
+$ sudo curl -L https://siakhooi.github.io/rpms/siakhooi-rpms.repo | sudo tee /etc/yum.repos.d/siakhooi-rpms.repo > /dev/null
+
+$ sudo dnf install siakhooi-jexl-executor
+# or
+$ sudo yum install siakhooi-jexl-executor
+
+```
 
 ## Usage
 ```
@@ -20,7 +42,7 @@ USAGE:
    json2table [global options] [dataFile]
 
 VERSION:
-   v0.5.0
+   v0.7.2
 
 GLOBAL OPTIONS:
    --build                   print build info and exit
