@@ -44,7 +44,7 @@ nfpms:
     vendor: siakhooi
     homepage: https://github.com/siakhooi/json2table
     maintainer: siakhooi
-    description: convert json data to tabular format
+    description: print json data in tabular format
     license: MIT
     bindir: /usr/bin
     formats:

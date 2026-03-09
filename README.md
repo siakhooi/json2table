@@ -1,6 +1,6 @@
 # json2table
 
-convert json data to tabular format
+print json data in tabular format
 
 ## Installation
 
@@ -36,7 +36,7 @@ $ sudo yum install siakhooi-jexl-executor
 ## Usage
 ```
 NAME:
-   json2table - convert json data to tabular format
+   json2table - print json data in tabular format
 
 USAGE:
    json2table [global options] [dataFile]

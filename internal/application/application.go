@@ -16,7 +16,7 @@ Run start application
 func Run(args []string) error {
 	cmd := &cli.Command{
 		Name:      "json2table",
-		Usage:     "convert json data to tabular format",
+		Usage:     "print json data in tabular format",
 		ArgsUsage: "[dataFile]",
 		Version:   versioninfo.Version,
 		Action:    action,

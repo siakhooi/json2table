@@ -77,7 +77,7 @@ func TestRunCommandStructure(t *testing.T) {
 	// Verify the command is properly structured
 	cmd := &cli.Command{
 		Name:      "json2table",
-		Usage:     "convert json data to tabular format",
+		Usage:     "print json data in tabular format",
 		ArgsUsage: "[dataFile]",
 		Action:    action,
 		Flags:     flags(),
@@ -86,7 +86,7 @@ func TestRunCommandStructure(t *testing.T) {
 	if cmd.Name != "json2table" {
 		t.Errorf("expected name 'json2table', got '%s'", cmd.Name)
 	}
-	if cmd.Usage != "convert json data to tabular format" {
+	if cmd.Usage != "print json data in tabular format" {
 		t.Errorf("unexpected usage: %s", cmd.Usage)
 	}
 	if cmd.ArgsUsage != "[dataFile]" {
