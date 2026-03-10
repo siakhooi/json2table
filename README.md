@@ -30,7 +30,6 @@ $ sudo curl -L https://siakhooi.github.io/rpms/siakhooi-rpms.repo | sudo tee /et
 $ sudo dnf install siakhooi-json2table
 # or
 $ sudo yum install siakhooi-json2table
-
 ```
 
 ## Usage
