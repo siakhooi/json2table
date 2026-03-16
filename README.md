@@ -41,13 +41,21 @@ USAGE:
    json2table [global options] [dataFile]
 
 VERSION:
-   v0.7.2
+   v1.1.0
 
 GLOBAL OPTIONS:
-   --build                   print build info and exit
-   --spec string, -s string  read spec from specFile.json, or from environment variable JSON2TABLE_SPEC or JSON2TABLE_SPEC_FILE if not provided
-   --help, -h                show help
-   --version, -v             print the version
+   --build                      print build info and exit
+   --spec string, -s string     read spec from specFile.json, or from environment variable JSON2TABLE_SPEC or JSON2TABLE_SPEC_FILE if not provided
+   --columns string, -c string  Comma separated list of columns to print, ignore -s and JSON2TABLE_SPEC or JSON2TABLE_SPEC_FILE if provided
+   --help, -h                   show help
+   --version, -v                print the version
+```
+### Examples
+```
+$ json2table -s ./samples/spec1.json ./samples/data1.json
+
+$ json2table -c 'id,desc,url,display.name' ./samples/data2.json
+
 ```
 
 ## Spec Reference
