@@ -63,7 +63,11 @@ func validateSpecFileValues(spec *Spec) error {
 	return nil
 }
 
-func readParseValidateSpec(specFile, envSpec string) (*Spec, error) {
+func readParseValidateSpec(specFile, envSpec, columns string) (*Spec, error) {
+	if columns != "" {
+		return convertColumnsToSpec(columns)
+	}
+
 	data := []byte(envSpec)
 	if envSpec == "" {
 		var err error

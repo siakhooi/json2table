@@ -144,8 +144,7 @@ func TestValidateSpecFileValuesValid(t *testing.T) {
 
 func TestReadParseValidateSpecUsesEnvSpecWhenProvided(t *testing.T) {
 	envSpec := `{"columns":[{"path":"$.name","color":"green"}]}`
-
-	spec, err := readParseValidateSpec("/path/does/not/exist/spec.json", envSpec)
+	spec, err := readParseValidateSpec("/path/does/not/exist/spec.json", envSpec, "")
 	if err != nil {
 		t.Fatalf("ReadParseValidateSpec returned error: %v", err)
 	}
@@ -165,7 +164,7 @@ func TestReadParseValidateSpecReadsFromFile(t *testing.T) {
 		t.Fatalf("failed to write spec file: %v", err)
 	}
 
-	spec, err := readParseValidateSpec(specFile, "")
+	spec, err := readParseValidateSpec(specFile, "", "")
 	if err != nil {
 		t.Fatalf("ReadParseValidateSpec returned error: %v", err)
 	}
@@ -178,7 +177,7 @@ func TestReadParseValidateSpecReadsFromFile(t *testing.T) {
 }
 
 func TestReadParseValidateSpecReadFileError(t *testing.T) {
-	_, err := readParseValidateSpec(filepath.Join(t.TempDir(), "missing.json"), "")
+	_, err := readParseValidateSpec(filepath.Join(t.TempDir(), "missing.json"), "", "")
 	if err == nil {
 		t.Fatal("expected ReadParseValidateSpec to return error")
 	}
@@ -189,12 +188,30 @@ func TestReadParseValidateSpecReadFileError(t *testing.T) {
 
 func TestReadParseValidateSpecInvalidColorValue(t *testing.T) {
 	envSpec := `{"columns":[{"path":"$.name","color":"unknown-color"}]}`
-
-	_, err := readParseValidateSpec("", envSpec)
+	_, err := readParseValidateSpec("", envSpec, "")
 	if err == nil {
 		t.Fatal("expected ReadParseValidateSpec to return error")
 	}
 	if !strings.Contains(err.Error(), "invalid color value") {
 		t.Fatalf("error = %q, want to contain %q", err.Error(), "invalid color value")
+	}
+}
+
+func TestReadParseValidateSpecColumnsArg(t *testing.T) {
+	spec, err := readParseValidateSpec("", "", "id,name,age")
+	if err != nil {
+		t.Fatalf("ReadParseValidateSpec with columns arg returned error: %v", err)
+	}
+	if spec == nil {
+		t.Fatal("ReadParseValidateSpec with columns arg returned nil spec")
+	}
+	if len(spec.Columns) != 3 {
+		t.Fatalf("Columns length = %d, want 3", len(spec.Columns))
+	}
+	want := []string{"id", "name", "age"}
+	for i, col := range spec.Columns {
+		if len(col.Path) != 1 || col.Path[0] != want[i] {
+			t.Errorf("Column[%d].Path = %v, want %q", i, col.Path, want[i])
+		}
 	}
 }

@@ -16,12 +16,14 @@ type Arguments struct {
 	SpecFile string
 	DataFile string
 	EnvSpec  string
+	Columns  string
 }
 
 // ParseArguments parses CLI arguments, validates them into an Arguments struct
 func ParseArguments(c *cli.Command) (Arguments, error) {
 	envSpec := os.Getenv("JSON2TABLE_SPEC")
 
+	columns := c.String("columns")
 	specFile := validateSpecFile(c.String("spec"))
 
 	argumentsList := c.Args().Slice()
@@ -31,8 +33,10 @@ func ParseArguments(c *cli.Command) (Arguments, error) {
 	}
 
 	var errs []error
-	if specFile == "" && envSpec == "" {
-		errs = append(errs, fmt.Errorf("spec is mandatory: provide -s/--spec flag or set JSON2TABLE_SPEC or JSON2TABLE_SPEC_FILE environment variable"))
+	if columns == "" {
+		if specFile == "" && envSpec == "" {
+			errs = append(errs, fmt.Errorf("spec is mandatory: provide -s/--spec flag or set JSON2TABLE_SPEC or JSON2TABLE_SPEC_FILE environment variable"))
+		}
 	}
 	if len(argumentsList) > 1 {
 		errs = append(errs, fmt.Errorf("too many arguments: only one data file argument is allowed"))
@@ -48,6 +52,7 @@ func ParseArguments(c *cli.Command) (Arguments, error) {
 		SpecFile: specFile,
 		DataFile: dataFile,
 		EnvSpec:  envSpec,
+		Columns:  columns,
 	}
 
 	return args, nil

@@ -37,7 +37,7 @@ func action(_ context.Context, c *cli.Command) error {
 		return err
 	}
 
-	spec, err := readParseValidateSpec(args.SpecFile, args.EnvSpec)
+	spec, err := readParseValidateSpec(args.SpecFile, args.EnvSpec, args.Columns)
 	if err != nil {
 		return err
 	}
@@ -58,6 +58,11 @@ func flags() []cli.Flag {
 			Name:    "spec",
 			Aliases: []string{"s"},
 			Usage:   "read spec from specFile.json, or from environment variable JSON2TABLE_SPEC or JSON2TABLE_SPEC_FILE if not provided",
+		},
+		&cli.StringFlag{
+			Name:    "columns",
+			Aliases: []string{"c"},
+			Usage:   "Comma separated list of columns to print, ignore -s and JSON2TABLE_SPEC or JSON2TABLE_SPEC_FILE if provided",
 		},
 	}
 }
