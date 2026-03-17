@@ -50,20 +50,22 @@ GLOBAL OPTIONS:
    --help, -h                   show help
    --version, -v                print the version
 ```
-### Examples
+## Examples
+
+### Cli
 ```
 $ json2table -s ./samples/spec1.json ./samples/data1.json
 
 $ json2table -c 'id,desc,url,display.name' ./samples/data2.json
 
 ```
+### Scripts with Spec
+
+- [Picsum list](./examples/picsum-list.md)
 
 ## Spec Reference
 
 - [Spec file guide](./SPEC.md)
-
-### Examples
-- Example: [Picsum list](./examples/picsum-list.md)
 
 ## Quality
 
@@ -75,6 +77,7 @@ $ json2table -c 'id,desc,url,display.name' ./samples/data2.json
 - https://pkg.go.dev/github.com/siakhooi/json2table
 
 ## Reference
+
 - https://github.com/savioxavier/termlink
 - https://github.com/fatih/color
 
