@@ -8,7 +8,7 @@ require (
 	github.com/go-playground/validator/v10 v10.30.1
 	github.com/mattn/go-runewidth v0.0.21
 	github.com/savioxavier/termlink v1.4.3
-	github.com/urfave/cli/v3 v3.7.0
+	github.com/urfave/cli/v3 v3.8.0
 )
 
 require (
