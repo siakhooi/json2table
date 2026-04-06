@@ -6,7 +6,7 @@ require (
 	github.com/PaesslerAG/jsonpath v0.1.1
 	github.com/fatih/color v1.19.0
 	github.com/go-playground/validator/v10 v10.30.1
-	github.com/mattn/go-runewidth v0.0.21
+	github.com/mattn/go-runewidth v0.0.22
 	github.com/savioxavier/termlink v1.4.3
 	github.com/urfave/cli/v3 v3.8.0
 )
