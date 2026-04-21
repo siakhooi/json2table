@@ -8,8 +8,6 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"github.copilot",
-				"github.copilot-chat",
 				"lfm.vscode-makefile-term",
 				"yzhang.markdown-all-in-one",
 				"golang.go",

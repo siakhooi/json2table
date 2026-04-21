@@ -18,8 +18,6 @@ deb-list:
 	 dpkg-deb --contents dist/siakhooi-json2table*_amd64.deb
 all: clean go-mod-tidy test golangci-lint go-release
 quick: clean go-mod-tidy test golangci-lint build-linux
-commit:
-	scripts/git-commit-and-push.sh
 
 release:
 	scripts/create-release.sh
