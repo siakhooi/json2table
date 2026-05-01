@@ -5,5 +5,5 @@ git_commit_email: json2table@siakhooi.github.io
 git_commit_message: "json2table: Auto deploy"
 
 files:
-  - source: dist/siakhooi-json2table_1.1.0_amd64.deb
-    target: docs/pool/main/binary-amd64/siakhooi-json2table_1.1.0_amd64.deb
+  - source: dist/siakhooi-json2table_*_amd64.deb
+    target: docs/pool/main/binary-amd64/
