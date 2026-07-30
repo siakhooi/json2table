@@ -35,7 +35,7 @@ $ json2table -c 'id,desc,url,display.name' ./samples/data2.json
 
 ## Installation
 
-See [Installation.md](Installation.md) for Homebrew, Linux packages, Windows winget, and manual binary installs.
+See [Installation.md](Installation.md) for Homebrew, Scoop, Linux packages, Windows winget, and manual binary installs.
 
 ## Spec Reference
 

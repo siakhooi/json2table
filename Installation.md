@@ -11,6 +11,17 @@ brew install json2table
 
 Verify with `json2table --version`.
 
+## Scoop (windows)
+
+[Scoop](https://scoop.sh/) must be installed. Then run:
+
+```bash
+scoop bucket add siakhooi https://github.com/siakhooi/scoop-bucket.git
+scoop install json2table
+```
+
+Verify with `json2table --version`.
+
 ## Download binaries
 
 To install `json2table` manually, visit the [Release page](https://github.com/siakhooi/json2table/releases) and download the appropriate binary for your operating system and architecture.
