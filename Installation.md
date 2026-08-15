@@ -60,3 +60,10 @@ winget install -e --id SiakHooi.Json2Table
 ```
 
 Verify installation with `json2table --version`.
+
+## Build
+
+To build from source
+```
+go install github.com/siakhooi/json2table/cmd/json2table@latest
+```
