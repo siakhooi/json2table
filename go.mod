@@ -5,7 +5,7 @@ go 1.26.2
 require (
 	github.com/PaesslerAG/jsonpath v0.1.1
 	github.com/fatih/color v1.19.0
-	github.com/go-playground/validator/v10 v10.30.4
+	github.com/go-playground/validator/v10 v10.30.5
 	github.com/mattn/go-runewidth v0.0.30
 	github.com/savioxavier/termlink v1.4.3
 	github.com/urfave/cli/v3 v3.13.0
@@ -20,7 +20,7 @@ require (
 	github.com/leodido/go-urn v1.5.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	golang.org/x/crypto v0.55.0 // indirect
-	golang.org/x/sys v0.47.0 // indirect
-	golang.org/x/text v0.41.0 // indirect
+	golang.org/x/crypto v0.57.0 // indirect
+	golang.org/x/sys v0.48.0 // indirect
+	golang.org/x/text v0.42.0 // indirect
 )
