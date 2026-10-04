@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/urfave/cli/v3"
@@ -68,6 +69,84 @@ func TestRunWithHelp(t *testing.T) {
 	err := Run([]string{"json2table", "--help"})
 	if err != nil {
 		t.Errorf("unexpected error with --help: %v", err)
+	}
+}
+
+func TestRunWithNoArgsShowsHelp(t *testing.T) {
+	unsetSpecEnv(t)
+	restoreStdin := useCharDeviceStdin(t)
+	defer restoreStdin()
+
+	output := captureStdout(t, func() {
+		err := Run([]string{"json2table"})
+		if err != nil {
+			t.Fatalf("expected help with no args, got error: %v", err)
+		}
+	})
+	if !strings.Contains(output, "json2table") || !strings.Contains(output, "[dataFile]") {
+		t.Fatalf("expected help text, got %q", output)
+	}
+}
+
+func TestRunWithSpecFlagAndNoDataFileStillErrors(t *testing.T) {
+	unsetSpecEnv(t)
+	restoreStdin := useCharDeviceStdin(t)
+	defer restoreStdin()
+
+	err := Run([]string{"json2table", "-s", "spec.json"})
+	if err == nil {
+		t.Fatal("expected error when spec is set and no data file is provided")
+	}
+	if !strings.Contains(err.Error(), "data file is required") {
+		t.Fatalf("error = %q, want to contain %q", err.Error(), "data file is required")
+	}
+}
+
+func TestRunWithPipedStdinAndNoSpecStillErrors(t *testing.T) {
+	unsetSpecEnv(t)
+
+	originalStdin := os.Stdin
+	readPipe, writePipe, err := os.Pipe()
+	if err != nil {
+		t.Fatalf("failed to create stdin pipe: %v", err)
+	}
+	os.Stdin = readPipe
+	t.Cleanup(func() {
+		os.Stdin = originalStdin
+		_ = readPipe.Close()
+		_ = writePipe.Close()
+	})
+
+	err = Run([]string{"json2table"})
+	if err == nil {
+		t.Fatal("expected error when stdin is piped and no spec is provided")
+	}
+	if !strings.Contains(err.Error(), "spec is mandatory") {
+		t.Fatalf("error = %q, want to contain %q", err.Error(), "spec is mandatory")
+	}
+}
+
+func unsetSpecEnv(t *testing.T) {
+	t.Helper()
+	if err := os.Unsetenv("JSON2TABLE_SPEC"); err != nil {
+		t.Fatalf("failed to unset JSON2TABLE_SPEC: %v", err)
+	}
+	if err := os.Unsetenv("JSON2TABLE_SPEC_FILE"); err != nil {
+		t.Fatalf("failed to unset JSON2TABLE_SPEC_FILE: %v", err)
+	}
+}
+
+func useCharDeviceStdin(t *testing.T) func() {
+	t.Helper()
+	originalStdin := os.Stdin
+	devNull, err := os.Open("/dev/null")
+	if err != nil {
+		t.Fatalf("failed to open /dev/null: %v", err)
+	}
+	os.Stdin = devNull
+	return func() {
+		os.Stdin = originalStdin
+		_ = devNull.Close()
 	}
 }
 
