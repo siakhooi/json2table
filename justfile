@@ -73,14 +73,13 @@ run-common:
 
 # Exercise invalid CLI paths
 run-invalid:
-    -{{ json2table }}
     -{{ json2table }} -s ./samples/spec1.json
     -{{ json2table }} ./samples/data1.json ./samples/data1.json
     -{{ json2table }} -s ./samples/spec.json ./samples/data1.json ./samples/data1.json
 
-# Run with no arguments
+# Show help when no arguments are provided
 run-no-arguments-1:
-    -{{ json2table }}
+    {{ json2table }}
 
 # Run with a spec and no data file
 run-no-arguments-2:

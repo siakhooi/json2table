@@ -32,6 +32,17 @@ func action(_ context.Context, c *cli.Command) error {
 		return nil
 	}
 
+	// No positional args, flags, or piped stdin: print help and exit 0.
+	if len(c.Args().Slice()) == 0 && !anyFlagSet(c) {
+		dataFile, err := validateDataFile(nil)
+		if err != nil {
+			return err
+		}
+		if dataFile == "" {
+			return cli.ShowAppHelp(c)
+		}
+	}
+
 	args, err := ParseArguments(c)
 	if err != nil {
 		return err
@@ -48,6 +59,16 @@ func action(_ context.Context, c *cli.Command) error {
 	}
 	return PrintTable(spec, jsonData)
 }
+
+func anyFlagSet(c *cli.Command) bool {
+	for _, name := range c.FlagNames() {
+		if c.IsSet(name) {
+			return true
+		}
+	}
+	return false
+}
+
 func flags() []cli.Flag {
 	return []cli.Flag{
 		&cli.BoolFlag{
