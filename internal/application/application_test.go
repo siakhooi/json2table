@@ -12,8 +12,8 @@ import (
 func TestFlags(t *testing.T) {
 	f := flags()
 
-	if len(f) != 2 {
-		t.Errorf("expected 2 flags, got %d", len(f))
+	if len(f) != 3 {
+		t.Errorf("expected 3 flags, got %d", len(f))
 	}
 
 	// Test build flag
@@ -38,6 +38,20 @@ func TestFlags(t *testing.T) {
 	}
 	if len(specFlag.Aliases) != 1 || specFlag.Aliases[0] != "s" {
 		t.Errorf("expected alias 's' for spec flag")
+	}
+
+	columnsFlag, ok := f[2].(*cli.StringFlag)
+	if !ok {
+		t.Errorf("expected third flag to be StringFlag")
+	}
+	if columnsFlag.Name != "columns" {
+		t.Errorf("expected flag name 'columns', got '%s'", columnsFlag.Name)
+	}
+	if len(columnsFlag.Aliases) != 1 || columnsFlag.Aliases[0] != "c" {
+		t.Errorf("expected alias 'c' for columns flag")
+	}
+	if columnsFlag.Usage != "Comma separated list of columns to print, ignore -s and JSON2TABLE_SPEC or JSON2TABLE_SPEC_FILE if provided" {
+		t.Errorf("unexpected usage for columns flag: %s", columnsFlag.Usage)
 	}
 }
 
