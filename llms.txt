@@ -1,0 +1,182 @@
+# json2table
+
+> CLI: read JSON (file or stdin), print a fixed-width terminal table. For bash scripts, pipe API/CLI JSON into `json2table` and supply columns via `-c`, a spec file (`-s` / `JSON2TABLE_SPEC_FILE`), or inline spec (`JSON2TABLE_SPEC`). Output is human-readable text on stdout only (not JSON, not CSV).
+
+**Audience:** AI agents helping users write or fix bash scripts that call `json2table`. Read this file before suggesting commands, flags, or spec JSON.
+
+**Install:** package managers and binaries are documented in [Installation.md](Installation.md). Assume `json2table` is on `PATH` unless the user says otherwise.
+
+## Agent checklist
+
+When writing bash for this tool:
+
+1. **JSON must contain an array** to render. Use spec field `dataPath` (JSONPath, default `$`) to point at that array (e.g. `$.data2`, `$.items`). The value at `dataPath` must be a JSON array, not a single object.
+2. **Provide a spec** unless using `-c`: set `-s path/to/spec.json`, or `JSON2TABLE_SPEC_FILE`, or `JSON2TABLE_SPEC` (JSON string). If none of these and no `-c`, the command fails.
+3. **One data source:** exactly one positional file **or** piped stdin—not both, not two files.
+4. **Column paths** are JSONPath expressions evaluated **per row object** (e.g. `id`, `display.name`). They are not prefixed with `$.` on the row unless you intend full JSONPath from the row root.
+5. **Precedence:** `-c` → `JSON2TABLE_SPEC` (inline JSON) → spec file (`-s`, else `JSON2TABLE_SPEC_FILE`). `-c` ignores all spec sources; when `-c` is empty, a non-empty `JSON2TABLE_SPEC` wins over any spec file.
+6. **Errors:** message on stderr, exit code `1`. Success prints the table on stdout, exit `0`. With no args and no piped stdin, prints help and exits `0`.
+7. **Do not** use `json2table` as a JSON processor; use `jq` for filtering. Use `json2table` only for terminal table display.
+
+## CLI reference
+
+```
+json2table [global options] [dataFile]
+
+Global options:
+  -s, --spec string     Spec JSON file (see env vars if omitted)
+  -c, --columns string  Comma-separated column paths; skips all spec sources
+  --build               Print build metadata; exit
+  -h, --help            Help
+  -v, --version         Version
+```
+
+**Environment variables:**
+
+| Variable | Role |
+|----------|------|
+| `JSON2TABLE_SPEC` | Inline spec JSON string (used when `-c` is empty and no spec file read—see below) |
+| `JSON2TABLE_SPEC_FILE` | Path to spec file when `-s` is not passed on CLI |
+
+**How spec is loaded** (when `-c` is empty):
+
+- If `JSON2TABLE_SPEC` is non-empty, parse it as spec JSON (do not read a file).
+- Else read the spec file from `-s`, or from `JSON2TABLE_SPEC_FILE` if `-s` was not given.
+
+**Data input:**
+
+- Positional `dataFile`: path to JSON file.
+- No positional arg: if stdin is **not** a TTY (piped or redirected), read JSON from stdin.
+- Empty stdin with no file: error (`data file is required`).
+
+## Bash scripting patterns
+
+Use `set -euo pipefail` in scripts unless the user prefers otherwise. Check `json2table` exit status after pipelines (`set -o pipefail` makes the pipeline fail if `json2table` fails).
+
+### Pipe from curl or another command (typical)
+
+Root JSON is a **top-level array** (e.g. Picsum API). Default `dataPath` is `$`, which selects the document root—must be that array.
+
+```bash
+export JSON2TABLE_SPEC='{
+  "columns": [
+    { "path": "id", "title": "ID" },
+    { "path": "author", "title": "Author" },
+    { "path": "width", "title": "Width", "align": "right" },
+    { "path": "height", "title": "Height", "align": "right" }
+  ]
+}'
+curl -fsS 'https://picsum.photos/v2/list?page=1&limit=5' | json2table
+```
+
+Full example script: [examples/picsum-list.sh](examples/picsum-list.sh).
+
+### Spec file + data file
+
+```bash
+json2table -s ./table.spec.json ./response.json
+```
+
+### Spec file via env (keeps CLI short)
+
+```bash
+export JSON2TABLE_SPEC_FILE=./table.spec.json
+json2table ./response.json
+# or
+curl -fsS https://api.example.com/items | json2table
+```
+
+### Inline spec with `dataPath` for wrapped JSON
+
+When the array lives under a key (see [samples/data1.json](samples/data1.json)):
+
+```bash
+JSON2TABLE_SPEC='{"dataPath":"$.data2","columns":[{"path":"id","title":"ID"},{"path":"display.name"}]}' \
+  json2table ./samples/data1.json
+```
+
+### Quick columns without a spec file (`-c`)
+
+Best when the root (or default `dataPath` `$`) is already the array and fields are simple dot paths. Commas separate columns; spaces around commas are trimmed.
+
+```bash
+json2table -c 'id,desc,url,display.name' ./samples/data2.json
+```
+
+`-c` does not set `dataPath`; nested envelopes still need a full spec with `dataPath`.
+
+### Heredoc for readable spec in bash
+
+```bash
+read -r -d '' SPEC <<'EOF' || true
+{
+  "dataPath": "$.items",
+  "columns": [
+    { "path": "name", "title": "Name" },
+    { "path": "status", "title": "Status", "align": "center" }
+  ]
+}
+EOF
+export JSON2TABLE_SPEC="$SPEC"
+jq -n '{items:[{name:"a",status:"ok"}]}' | json2table
+```
+
+### Function wrapper (reusable in scripts)
+
+```bash
+j2t() {
+  local spec_file="${1:?spec file}"
+  json2table -s "$spec_file" "${2:--}"
+}
+# j2t ./cols.json data.json
+# curl -fsS ... | j2t ./cols.json
+```
+
+## Spec essentials (for scripts)
+
+Minimal spec:
+
+```json
+{
+  "dataPath": "$.optional.path.to.array",
+  "columns": [
+    { "path": "fieldOrJsonPath", "title": "Header" }
+  ]
+}
+```
+
+| Field | Notes |
+|-------|--------|
+| `dataPath` | Optional. JSONPath to the **array** of rows. Default `$`. |
+| `columns` | Required. At least one column. |
+| `path` | Required per column. String or array of strings (first matching non-null path wins). |
+| `title` | Optional header; default from last segment of first path. |
+| `align` | `left`, `right`, `center`. |
+| `minWidth` / `maxWidth` | Integers; control column width. |
+| `urlPath` | JSONPath on the row for a URL; makes terminal hyperlinks when stdout is a TTY. |
+| `color` | ANSI styling; see [SPEC.md](SPEC.md). |
+
+Column `path` examples on a row `{"id":1,"display":{"name":"x"}}`: `id`, `display.name`, or `["display.name","display.name1"]`.
+
+## Common mistakes (avoid in generated scripts)
+
+| Mistake | Fix |
+|---------|-----|
+| Piping JSON but also passing a second file arg | Use only stdin **or** one file. |
+| Object at root without `dataPath` | Set `dataPath` to the array key, e.g. `$.data.items`. |
+| Expecting machine-readable output | Output is a text table; parse with `jq` before tabling, or use another tool for CSV. |
+| Using `-c` with wrapped JSON | Use a spec with `dataPath`. |
+| Invalid spec JSON in `export JSON2TABLE_SPEC='...'` | Use single-quoted heredoc or a `.json` file; escape carefully in bash. |
+| Forgetting spec when not using `-c` | Set `-s`, `JSON2TABLE_SPEC_FILE`, or `JSON2TABLE_SPEC`. |
+
+## Docs and examples
+
+- [README.md](README.md): overview and flag list
+- [SPEC.md](SPEC.md): full spec (colors, conditions, examples)
+- [Installation.md](Installation.md): install paths
+- [examples/picsum-list.md](examples/picsum-list.md): documented pipe + env spec pattern
+- [samples/spec1.json](samples/spec1.json), [samples/spec2.json](samples/spec2.json), [samples/data1.json](samples/data1.json), [samples/data2.json](samples/data2.json): fixtures used in tests and `just run-common`
+
+## Optional (repository development)
+
+Go module `github.com/siakhooi/json2table`. Entry: [cmd/json2table/main.go](cmd/json2table/main.go); logic in [internal/application/](internal/application/). Local CI: `just ci`. Upstream: [https://github.com/siakhooi/json2table](https://github.com/siakhooi/json2table).
